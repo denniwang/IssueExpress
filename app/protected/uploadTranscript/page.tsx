@@ -1,6 +1,6 @@
 "use client";
 
-import TranscriptUpload from "@/components/transcript-upload";
+import TranscriptUpload from "@/app/components/transcript-upload";
 import { useEffect } from "react";
 import { validTickets } from "../tickets/types";
 
