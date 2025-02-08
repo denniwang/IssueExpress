@@ -63,7 +63,7 @@ const TranscriptUpload = () => {
   };
 
   const handleSubmit = async (data: FormData) => {
-    const userInput = ocrResult || "";
+    const userInput = ocrResult || data || "";
 
     if (userInput) {
       try {

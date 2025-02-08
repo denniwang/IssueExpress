@@ -51,7 +51,7 @@ async function signInWithGithub() {
   });
   return { data, error };
 }
-export const signInAction = async (formData: FormData) => {
+export const signInAction = async () => {
   const { data, error } = await signInWithGithub();
   console.log(data, error);
   if (data.url) {

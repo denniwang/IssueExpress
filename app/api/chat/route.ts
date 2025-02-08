@@ -48,7 +48,7 @@ export async function POST(req: Request) {
       data: rawResponse,
     });
   } catch (error: any) {
-    console.error('Groq API Error:', error);
+    console.error("Groq API Error:", error);
     return NextResponse.json(
       {
         success: false,
