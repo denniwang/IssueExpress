@@ -2,14 +2,74 @@
 
 import { useEffect, useState } from "react";
 import { Ticket } from "../tickets/types";
-import { MapPin, Info, Trash2, ArrowLeftCircle, ChevronDown } from "lucide-react";
-import React from "react";
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "../../components/ui/tooltip";
+  MapPin,
+  Info,
+  Trash2,
+  ArrowLeftCircle,
+  ChevronDown,
+} from "lucide-react";
+import React from "react";
+
+// Update the SVG path components with precise node connections
+const LeftToRightPath = () => (
+  <svg className="absolute w-full h-48 " viewBox="0 0 800 200">
+    <path
+      // Start from center of left node (x: node radius), curve to center of right node
+      d="M 12 12 C 250 12, 550 188, 788 188"
+      stroke="#8B4513"
+      strokeWidth="4"
+      fill="none"
+      strokeDasharray="10,10"
+      className="opacity-60 animate-draw-line"
+    />
+  </svg>
+);
+
+const RightToLeftPath = () => (
+  <svg className="absolute w-full h-48 -z-10" viewBox="0 0 800 200">
+    <path
+      // Start from center of right node, curve to center of left node
+      d="M 788 12 C 550 12, 250 188, 12 188"
+      stroke="#8B4513"
+      strokeWidth="4"
+      fill="none"
+      strokeDasharray="10,10"
+      className="opacity-60 animate-draw-line"
+    />
+  </svg>
+);
+
+// Add these styles to your global CSS or create them inline
+const styles = `
+  @keyframes drawLine {
+    from {
+      stroke-dashoffset: 1000;
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  .animate-draw-line {
+    animation: drawLine 1.5s ease-out forwards;
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-out forwards;
+  }
+`;
 
 export default function SummaryPage() {
   const [approvedTickets, setApprovedTickets] = useState<Ticket[]>([]);
@@ -54,117 +114,131 @@ export default function SummaryPage() {
   };
 
   return (
-    <div className="flex h-screen bg-[url('/desert-bg.jpg')] bg-cover bg-center">
-      {/* Main Roadmap */}
-      <div className="flex-1 p-8 overflow-y-auto bg-amber-50/80 backdrop-blur-sm">
-        <h1 className="text-5xl font-bold mb-16 text-center text-brown-800 font-western drop-shadow-lg">
-          Wild West Road Trip Map 🗺️
-        </h1>
+    <>
+      <style jsx global>
+        {styles}
+      </style>
+      <div className="flex h-screen bg-[url('/desert-bg.jpg')] bg-cover bg-center">
+        <div className="flex-1 p-8 overflow-y-auto bg-amber-50/80 backdrop-blur-sm">
+          <h1 className="text-5xl font-bold mb-16 text-center text-brown-800 font-western drop-shadow-lg">
+            TRANSCRIPT OVERVIEW
+          </h1>
 
-        <div className="relative max-w-5xl mx-auto">
-          {/* Vertical Road */}
-          <div className="absolute left-1/2 top-0 w-6 h-full bg-brown-400/90 transform -translate-x-1/2 rounded-full shadow-lg" />
-
-          {/* Tickets as Stops */}
-          <div className="relative py-16 space-y-48">
-            {approvedTickets.map((ticket, index) => (
-              <TooltipProvider key={index}>
-                <Tooltip>
-                  <TooltipTrigger>
-                    <div className="relative">
-                      {/* Connecting Line to Previous Node */}
-                      {index !== 0 && (
-                        <div className="absolute left-1/2 -top-24 transform -translate-x-1/2 w-8 h-48">
-                          <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-2 h-full bg-brown-600/70" />
-                          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                            <ChevronDown className="text-brown-600" size={32} />
-                          </div>
-                        </div>
+          <div className="relative max-w-4xl mx-auto">
+            {/* Tickets as Stops */}
+            <div className="relative py-8">
+              {approvedTickets.map((ticket, index) => (
+                <div
+                  key={index}
+                  className="relative mb-[6rem]"
+                  style={{
+                    animation: `fadeIn 0.5s ease-out forwards`,
+                    animationDelay: `${index * 0.2}s`,
+                    opacity: 0,
+                  }}
+                >
+                  {/* Path connecting nodes */}
+                  {index !== 0 && (
+                    <div
+                      className="absolute -top-36 left-0 right-0 h-72 overflow-visible" // Adjusted height and positioning
+                      style={{
+                        animation: `fadeIn 0.8s ease-out forwards`,
+                        animationDelay: `${index * 0.2}s`,
+                        opacity: 0,
+                      }}
+                    >
+                      {index % 2 === 1 ? (
+                        <LeftToRightPath />
+                      ) : (
+                        <RightToLeftPath />
                       )}
+                    </div>
+                  )}
 
-                      <div className={`flex items-center gap-24 ${
-                        index % 2 === 0 ? 'flex-row' : 'flex-row-reverse'
-                      }`}>
-                        {/* Stop Point */}
-                        <div className="w-16 h-16 bg-brown-600 rounded-full flex items-center justify-center border-4 border-amber-200 hover:border-amber-400 transition-all cursor-pointer z-20 shadow-lg hover:shadow-xl transform hover:scale-110">
-                          <MapPin className="text-amber-200" size={32} />
+                  {/* Node content */}
+                  <div
+                    className={`flex items-center ${
+                      index % 2 === 0 ? "flex-row" : "flex-row-reverse"
+                    }`}
+                  >
+                    <div className="relative group w-24">
+                      <div className="w-24 h-24 bg-amber-50 rounded-full flex items-center justify-center border-4 border-amber-200 hover:border-amber-400 transition-all cursor-pointer z-20 shadow-lg hover:shadow-xl transform hover:scale-105">
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <span className="text-amber-200 text-2xl font-bold"></span>
                         </div>
-                        {/* Ticket Info */}
-                        <div className="w-72 bg-white/80 p-4 rounded-lg shadow-md hover:shadow-lg transition-all">
-                          <h3 className="font-western text-xl text-brown-800">
+                        <MapPin className="text-amber-200" size={48} />
+                      </div>
+
+                      {/* Ticket Info Card - show on hover */}
+                      <div className="absolute top-0 left-1/2 transform -translate-x-1/2 mt-32 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-30">
+                        <div className="w-80 bg-white/95 p-6 rounded-lg shadow-xl">
+                          <div className="flex justify-between items-center mb-2">
+                            <span className="text-sm text-gray-500">
+                              {index + 1} of {approvedTickets.length}
+                            </span>
+                            <span className="px-2 py-1 bg-green-100 text-green-800 text-sm rounded">
+                              Accepted
+                            </span>
+                          </div>
+                          <h3 className="font-semibold text-lg mb-2">
                             {ticket.name}
                           </h3>
-                          <span className="text-sm text-brown-600">
-                            {new Date(ticket.startDate || '').toLocaleDateString()}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <div className="w-80 p-6 bg-white/95 backdrop-blur-sm shadow-xl rounded-lg border-2 border-brown-300">
-                      <div className="space-y-3">
-                        <h4 className="font-bold text-brown-800">{ticket.name}</h4>
-                        <p className="text-sm text-brown-600">{ticket.description}</p>
-                        <div className="flex items-center gap-2 text-sm">
-                          <span className="px-2 py-1 bg-amber-100 rounded-full text-brown-700">
-                            {ticket.label}
-                          </span>
-                          {ticket.assignee && (
-                            <span className="text-brown-600">
-                              🤠 {ticket.assignee}
-                            </span>
+                          <p className="text-sm text-gray-600 mb-3">
+                            {ticket.description}
+                          </p>
+                          {ticket.label && (
+                            <div className="flex items-center gap-2">
+                              <span className="px-2 py-1 bg-amber-100 text-brown-700 text-sm rounded-full">
+                                {ticket.label}
+                              </span>
+                            </div>
                           )}
                         </div>
-                        {ticket.startDate && ticket.endDate && (
-                          <div className="text-xs text-brown-500">
-                            {new Date(ticket.startDate).toLocaleDateString()} -
-                            {new Date(ticket.endDate).toLocaleDateString()}
-                          </div>
-                        )}
                       </div>
                     </div>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
+
+                    <div className="flex-1 min-w-[200px] max-w-[400px]" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Rejected Tickets Sidebar */}
+        <div className="w-80 bg-brown-800 p-4 overflow-y-auto">
+          <h2 className="text-xl font-western text-amber-200 mb-4">
+            Rejected Saloons
+          </h2>
+          <div className="space-y-4">
+            {rejectedTickets.map((ticket, index) => (
+              <div
+                key={index}
+                className="bg-brown-700 rounded-lg p-3 text-amber-100"
+              >
+                <h3 className="font-semibold">{ticket.name}</h3>
+                <p className="text-sm text-amber-200 mt-1">{ticket.label}</p>
+                <div className="flex justify-end gap-2 mt-2">
+                  <button
+                    onClick={() => handleRestore(ticket)}
+                    className="p-1 hover:text-green-400 transition-colors"
+                    title="Restore"
+                  >
+                    <ArrowLeftCircle size={18} />
+                  </button>
+                  <button
+                    onClick={() => handleDelete(ticket)}
+                    className="p-1 hover:text-red-400 transition-colors"
+                    title="Delete"
+                  >
+                    <Trash2 size={18} />
+                  </button>
+                </div>
+              </div>
             ))}
           </div>
         </div>
       </div>
-
-      {/* Rejected Tickets Sidebar */}
-      <div className="w-80 bg-brown-800 p-4 overflow-y-auto">
-        <h2 className="text-xl font-western text-amber-200 mb-4">
-          Rejected Saloons
-        </h2>
-        <div className="space-y-4">
-          {rejectedTickets.map((ticket, index) => (
-            <div
-              key={index}
-              className="bg-brown-700 rounded-lg p-3 text-amber-100"
-            >
-              <h3 className="font-semibold">{ticket.name}</h3>
-              <p className="text-sm text-amber-200 mt-1">{ticket.label}</p>
-              <div className="flex justify-end gap-2 mt-2">
-                <button
-                  onClick={() => handleRestore(ticket)}
-                  className="p-1 hover:text-green-400 transition-colors"
-                  title="Restore"
-                >
-                  <ArrowLeftCircle size={18} />
-                </button>
-                <button
-                  onClick={() => handleDelete(ticket)}
-                  className="p-1 hover:text-red-400 transition-colors"
-                  title="Delete"
-                >
-                  <Trash2 size={18} />
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
+    </>
   );
 }

@@ -17,7 +17,7 @@ export default async function ProtectedPage() {
   console.log("Access Token", accessToken);
 
   if (error) {
-    console.error('Auth error:', error);
+    console.error("Auth error:", error);
     return null;
   }
 
