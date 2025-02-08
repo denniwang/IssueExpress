@@ -38,12 +38,20 @@ export default function SummaryPage() {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-6">Order Summary</h1>
+      <h1 className="text-2xl font-bold mb-6">Approved Tickets</h1>
       <div className="space-y-4">
         {approvedTickets.map((ticket: Ticket, index: number) => (
           <h2 key={index}>{ticket.name}</h2>
         ))}
+
+      </div>
+      <h1 className="text-2xl font-bold mb-6">Rejected Tickets</h1>
+      <div className="space-y-4">
+        {rejectedTickets.map((ticket: Ticket, index: number) => (
+          <h2 key={index}>{ticket.name}</h2>
+        ))}
       </div>
     </div>
+
   );
 }
