@@ -46,7 +46,7 @@ export default function ProjectSelector() {
   if (!isClient) return null;
 
   return (
-    <div className="w-full flex flex-col items-center">
+    <div className="w-full flex flex-col items-center h-screen bg-gradient-to-b from-[#145D98] to-[#F7E3E1]">
       <div className="absolute top-4 left-4">
         <IoReturnUpBackOutline
           className="text-white text-4xl cursor-pointer"
@@ -59,7 +59,7 @@ export default function ProjectSelector() {
           <div className="w-[1px] h-16 bg-white mx-32" />
           <div className="w-[1px] h-16 bg-white mx-32" />
         </div>
-        <div className="bg-[#9A9A9A] px-16 py-4 mt-16 shadow-lg">
+        <div className="bg-[#145D98] px-16 py-4 mt-16 shadow-lg drop-shadow-xs">
           <h1 className="text-3xl font-retro text-white tracking-[0.2em]">
             SELECT YOUR PROJECT
           </h1>
@@ -90,8 +90,8 @@ export default function ProjectSelector() {
               key={project.id}
               className="shield-container w-[240px] h-[280px] flex-shrink-0 transition-transform duration-300 hover:scale-105"
             >
-              <div className="shield relative bg-[#9A9A9A] w-full h-full flex flex-col items-center justify-center text-center border-[3px] border-white">
-                <div className="absolute top-0 left-0 right-0 bg-[#333333] py-3 shield-header">
+              <div className="shield relative bg-[#145D98] w-full h-full flex flex-col items-center justify-center text-center border-[3px] border-white">
+                <div className="absolute top-0 left-0 right-0 bg-[#FF3C68] py-3 shield-header">
                   <span className="font-retro text-white text-sm tracking-wider">
                     {project.organization}
                   </span>
@@ -122,7 +122,7 @@ export default function ProjectSelector() {
 
       {/* Confirm button */}
       <button
-        className="bg-black hover:bg-gray-900 text-white font-retro px-12 py-3 text-lg tracking-wider"
+        className="bg-[#0F2E4A] hover:bg-gray-900 text-white font-retro px-12 py-3 text-lg tracking-wider"
         onClick={handleConfirm}
       >
         CONFIRM
