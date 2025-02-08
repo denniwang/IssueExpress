@@ -11,7 +11,7 @@ export default function TranscriptPage() {
     validTickets.length = 0;
   }, []);
   return (
-    <div className="min-h-screen bg-[#808080] flex flex-col items-center">
+    <div className="min-h-screen bg-[#808080] flex flex-col items-center font-retro">
       <div className="absolute top-4 left-4">
         <IoReturnUpBackOutline
           className="text-white text-4xl cursor-pointer"
