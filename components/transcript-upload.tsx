@@ -1,6 +1,7 @@
 "use client";
 import { useState, useCallback } from "react";
 import { useDropzone } from "react-dropzone";
+import { tickets, ticket } from "../app/tickets/types";
 
 export default function TranscriptUpload() {
   const [files, setFiles] = useState<File[]>([]);
@@ -53,9 +54,19 @@ export default function TranscriptUpload() {
           const fixedResponse = `[${rawResponse}]`;
           try {
             const parsedJson = JSON.parse(fixedResponse);
+
+            const newTickets: ticket[] = parsedJson.map((item: any) => {
+              return {
+                assignee: item.assignee || "Unassigned",
+                name: item.name || "TBD",
+                label: item.label || "Unknown",
+                description: item.description || "TBD",
+              };
+            });
+
+            tickets.push(...newTickets);
   
             setParsedResponse(parsedJson); 
-            console.log("Parsed Response:", parsedJson);
           } catch (error) {
             console.error("Failed to parse JSON:", error);
           }
