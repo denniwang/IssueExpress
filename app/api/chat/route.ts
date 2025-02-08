@@ -1,5 +1,5 @@
-import { NextResponse } from 'next/server';
-import Groq from 'groq-sdk';
+import { NextResponse } from "next/server";
+import Groq from "groq-sdk";
 
 const groq = new Groq({
   apiKey: process.env.GROQ_API_KEY,
@@ -28,20 +28,20 @@ export async function POST(req: Request) {
     const completion = await groq.chat.completions.create({
       messages: [
         {
-          role: 'system',
+          role: "system",
           content: systemPrompt,
         },
         {
-          role: 'user',
+          role: "user",
           content: fullPrompt,
         },
       ],
-      model: 'llama-3.3-70b-versatile',
+      model: "llama-3.3-70b-versatile",
       temperature: 0.7,
       max_tokens: 2000,
     });
 
-    const rawResponse = completion.choices[0]?.message?.content || '';
+    const rawResponse = completion.choices[0]?.message?.content || "";
 
     return NextResponse.json({
       success: true,
@@ -51,7 +51,7 @@ export async function POST(req: Request) {
     return NextResponse.json(
       {
         success: false,
-        message: 'Error contacting Groq API',
+        message: "Error contacting Groq API",
       },
       { status: 500 }
     );
