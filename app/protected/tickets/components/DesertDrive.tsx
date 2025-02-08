@@ -17,7 +17,7 @@ const DesertDrive: React.FC = () => {
     tickets[currentTicketIndex]
   );
   const router = useRouter();
-
+  
   // Calculate progress percentage
   const progress = (currentTicketIndex / (tickets.length - 1)) * 100;
 
@@ -57,31 +57,33 @@ const DesertDrive: React.FC = () => {
   return (
     <div className="relative w-full">
       {/* Progress Bar */}
-<div className="w-full bg-gray-800 fixed top-0 left-0 z-50 p-4">
-  <div className="flex items-center justify-between max-w-6xl mx-auto relative">
-    <div className="p-2 rounded-lg bg-gray-700">
-      <TentTree className="w-5 h-5 text-white" />
-    </div>
+      <div className="w-full bg-gray-800 fixed top-0 left-0 z-50 p-4">
+        <div className="flex items-center justify-between max-w-6xl mx-auto relative">
+          <div className="p-2 rounded-lg bg-gray-700">
+            <TentTree className="w-5 h-5 text-white" />
+          </div>
 
-    <div className="flex-1 mx-8 relative h-1">
-      <div 
-        className="absolute top-0 left-0 h-full bg-gradient-to-r from-blue-400 to-blue-600 transition-all duration-300"
-        style={{ width: `${progress}%` }}
-      />
-      
-      <div className="absolute top-0 left-0 w-full h-full bg-gray-600" />
+          <div className="flex-1 mx-8 relative h-1">
+            <div 
+              className="absolute top-0 left-0 h-full bg-gradient-to-r from-blue-400 to-blue-600 transition-all duration-300"
+              style={{ width: `${progress}%` }}
+            />
+            
+            <div className="absolute top-0 left-0 w-full h-full bg-gray-600" />
 
-      <div className="absolute top-1/2 -translate-y-1/2 z-10 transition-all duration-300"
-        style={{ left: `${progress}%` }}>
-        <Car className="w-6 h-6 text-white -translate-x-1/2" />
+            <div className="absolute top-1/2 -translate-y-1/2 z-10 transition-all duration-300"
+              style={{ left: `${progress}%` }}>
+              <Car className="w-6 h-6 text-white -translate-x-1/2" />
+            </div>
+          </div>
+
+          <div className="p-2 rounded-lg bg-gray-700">
+            <MapPin className="w-5 h-5 text-white" />
+          </div>
+        </div>
       </div>
-    </div>
 
-    <div className="p-2 rounded-lg bg-gray-700">
-      <MapPin className="w-5 h-5 text-white" />
-    </div>
-  </div>
-</div>
+      {/*Game*/}
       <div className={styles.scene}>
         <div className={styles.sky}>
           <div className={styles.cloud}></div>
