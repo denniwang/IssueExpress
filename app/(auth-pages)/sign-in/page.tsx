@@ -2,12 +2,14 @@ import { signInAction } from "@/app/actions";
 import { Message } from "@/components/form-message";
 import { SubmitButton } from "@/components/submit-button";
 
-export default async function Login(props: { searchParams: Promise<Message> }) {
+export default async function Login() {
   return (
-    <form className="flex-1 flex flex-col min-w-64">
-      <SubmitButton pendingText="Signing In..." formAction={signInAction}>
-        Sign in
-      </SubmitButton>
-    </form>
+    <div id="login-body" className="w-screen h-screen flex items-center justify-center bg-cover bg-center" style={{ backgroundImage: "url('/login-background.png')" }}>
+      <form>
+        <SubmitButton pendingText="Signing In..." formAction={signInAction} className="bg-white text-black hover:bg-gray-400 hover:text-black">
+          Sign in to GitHub
+        </SubmitButton>
+      </form>
+    </div>
   );
 }
