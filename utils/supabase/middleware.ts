@@ -50,7 +50,7 @@ export const updateSession = async (request: NextRequest) => {
       !user.error
     ) {
       return NextResponse.redirect(
-        new URL("/protected/uploadTranscript", request.url)
+        new URL("/protected/repositories", request.url)
       );
     }
 
