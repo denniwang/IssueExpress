@@ -10,7 +10,13 @@ export async function GET(req: Request) {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      query: 'query { project(id: "' + projectId + '") { name } }',
+      query: `
+        query {
+          project(id: "${projectId}") {
+            name
+          }
+        }
+      `,
     }),
   });
 
