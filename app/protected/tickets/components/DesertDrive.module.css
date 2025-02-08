@@ -236,3 +236,26 @@
     background-position: -40px 0;
   }
 }
+
+@keyframes slideLeftAndBack {
+  0% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  45% {
+    transform: translateX(-100vw);
+    opacity: 0;
+  }
+  55% {
+    transform: translateX(100vw);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.slideOut {
+  animation: slideLeftAndBack 2s ease-in-out forwards;
+}

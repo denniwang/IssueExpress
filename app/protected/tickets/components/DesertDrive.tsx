@@ -8,10 +8,12 @@ import { TentTree, Car, MapPin } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Background from "./Background";
 import TicketComponent from "@/app/components/Ticket";
+
 const DesertDrive: React.FC = () => {
   const [currentTicketIndex, setCurrentTicketIndex] = useState(0);
   const [validTickets, setValidTickets] = useState<Ticket[]>([]);
   const [tickets, setTickets] = useState<Ticket[]>(defaultTickets);
+  const [animationClass, setAnimationClass] = useState("");
   const router = useRouter();
 
   // Derive currentTicket from currentTicketIndex and tickets
@@ -57,21 +59,29 @@ const DesertDrive: React.FC = () => {
   const handleApproveDenny = (approved: boolean) => {
     if (!currentTicket) return;
 
-    // Update the current ticket with the approval status
-    const updatedTickets = tickets.map((ticket, index) =>
-      index === currentTicketIndex ? { ...ticket, approved } : ticket
-    );
+    // Trigger the animation
+    setAnimationClass(styles.slideOut);
 
-    // Update validTickets if approved
-    if (approved) {
-      setValidTickets([...validTickets, currentTicket]);
-    }
+    setTimeout(() => {
+      // Update the current ticket with the approval status
+      const updatedTickets = tickets.map((ticket, index) =>
+        index === currentTicketIndex ? { ...ticket, approved } : ticket
+      );
 
-    localStorage.setItem("tickets", JSON.stringify(updatedTickets));
-    setTickets(updatedTickets); // Ensure state reflects updates
+      // Update validTickets if approved
+      if (approved) {
+        setValidTickets([...validTickets, currentTicket]);
+      }
 
-    // Move to the next ticket
-    moveToNextTicket();
+      localStorage.setItem("tickets", JSON.stringify(updatedTickets));
+      setTickets(updatedTickets); // Ensure state reflects updates
+
+      // Move to the next ticket
+      moveToNextTicket();
+
+      // Reset the animation class
+      setAnimationClass("");
+    }, 2000); // Duration of the slide-out animation
   };
 
   // Move to next ticket
@@ -149,7 +159,7 @@ const DesertDrive: React.FC = () => {
 
       {/* Render current ticket */}
       {currentTicket && (
-        <div className={styles.ticketApprovalContainer}>
+        <div className={`${styles.ticketApprovalContainer} ${animationClass}`}>
           <TicketComponent
             step={currentTicketIndex + 1}
             totalSteps={tickets.length}
