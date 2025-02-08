@@ -183,8 +183,9 @@
 
 .ticketApprovalContainer {
   position: absolute;
-  top: 100px;
-  right: 20px;
+  min-width: 600px;
+  top: 120px;
+  right: 40px;
   z-index: 1000;
   margin: 0;
   padding: 20px;
