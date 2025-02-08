@@ -12,17 +12,16 @@ const DesertDrive: React.FC = () => {
     { ticket: Ticket; approved: Boolean }[]
   >([]);
   const [currentTicketIndex, setCurrentTicketIndex] = useState(0);
-  const [currentTicket, setCurrentTicket] = useState<Ticket | null>(
+  const [currentTicket, setCurrentTicket] = useState<Ticket>(
     tickets[currentTicketIndex]
   );
   const router = useRouter();
 
   // Approve ticket
   const handleApproveDenny = (approved: boolean) => {
-    const ticketToApprove = tickets[currentTicketIndex];
     setValidTickets((prevValidTickets) => [
       ...prevValidTickets,
-      { ticket: ticketToApprove, approved },
+      { ticket: currentTicket, approved },
     ]);
     moveToNextTicket();
   };
@@ -31,6 +30,7 @@ const DesertDrive: React.FC = () => {
   const moveToNextTicket = () => {
     if (currentTicketIndex < tickets.length - 1) {
       setCurrentTicketIndex((prevIndex) => prevIndex + 1);
+      setCurrentTicket(tickets[currentTicketIndex + 1]);
     } else {
       // Store tickets in session storage
       sessionStorage.setItem("tickets", JSON.stringify(validTickets));
@@ -38,6 +38,16 @@ const DesertDrive: React.FC = () => {
       // Redirect to the summary page
       router.push("/protected/summary");
     }
+  };
+
+  const handleTicketChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setCurrentTicket((prevTicket) => {
+      if (!prevTicket) return prevTicket;
+      return {
+        ...prevTicket,
+        [e.target.name]: e.target.value,
+      };
+    });
   };
 
   return (
@@ -71,14 +81,37 @@ const DesertDrive: React.FC = () => {
       <div className={styles.ticketApprovalContainer}>
         {currentTicket && (
           <div className={styles.ticketInfo}>
-            <h2>{currentTicket.name}</h2>
+            <h2>
+              <input
+                type="text"
+                name="name"
+                value={currentTicket.name}
+                onChange={handleTicketChange}
+              />
+            </h2>
             <p>
-              <strong>Assignee:</strong> {currentTicket.assignee}
+              <strong>Assignee:</strong>
+              <input
+                type="text"
+                name="assignee"
+                value={currentTicket.assignee}
+                onChange={handleTicketChange}
+              />
             </p>
             <p>
-              <strong>Label:</strong> {currentTicket.label}
+              <strong>Label:</strong>
+              <input
+                type="text"
+                name="label"
+                value={currentTicket.label}
+                onChange={handleTicketChange}
+              />
             </p>
-            <p>{currentTicket.description}</p>
+            <textarea
+              name="description"
+              value={currentTicket.description}
+              onChange={handleTicketChange}
+            />
             <div className={styles.ticketActions}>
               <button
                 onClick={() => handleApproveDenny(true)}
