@@ -1,3 +1,4 @@
+
 import TranscriptUpload from "@/components/transcript-upload";
 
 export default function TranscriptPage() {
