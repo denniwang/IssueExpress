@@ -12,39 +12,32 @@ interface Ticket {
 
 export default function SummaryPage() {
   const searchParams = useSearchParams();
-  const [tickets, setTickets] = useState<Ticket[]>([]);
+  const [approvedTickets, setApprovedTickets] = useState<Ticket[]>([]);
+  const [rejectedTickets, setRejectedTickets] = useState<Ticket[]>([]);
   const [total, setTotal] = useState(0);
 
   useEffect(() => {
-    const ticketsParam = searchParams.get("tickets");
-    if (ticketsParam) {
-      try {
-        const parsedTickets = JSON.parse(decodeURIComponent(ticketsParam));
-        setTickets(parsedTickets);
-        const sum = parsedTickets.reduce((acc: number, ticket: Ticket) => {
-          return acc + ticket.price * ticket.quantity;
-        }, 0);
-        setTotal(sum);
-      } catch (error) {
-        console.error("Error parsing tickets:", error);
+    const ticketsFromSession = sessionStorage.getItem("tickets");
+    const parsedTickets = ticketsFromSession
+      ? JSON.parse(ticketsFromSession)
+      : [];
+    for (const ticket of parsedTickets) {
+      if (ticket.approved) {
+        setApprovedTickets((prev) => [...prev, ticket.ticket]);
+      } else {
+        setRejectedTickets((prev) => [...prev, ticket.ticket]);
       }
     }
-  }, [searchParams]);
-
-  const ticketsFromSession = sessionStorage.getItem("tickets");
-  const parsedTickets = ticketsFromSession
-    ? JSON.parse(ticketsFromSession)
-    : [];
-  console.log(parsedTickets);
-  
-
+    console.log(approvedTickets);
+    console.log(rejectedTickets);
+  }, []); // Empty dependency array to run only on mount
 
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-6">Order Summary</h1>
       <div className="space-y-4">
-        {parsedTickets.map((ticket: Ticket) => (
-          <div key={ticket.title}>
+        {approvedTickets.map((ticket: Ticket, index: number) => (
+          <div key={index}>
             <h2>{ticket.title}</h2>
           </div>
         ))}
