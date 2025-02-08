@@ -185,13 +185,9 @@
   position: absolute;
   min-width: 600px;
   top: 120px;
-  right: 40px;
-  z-index: 1000;
-  margin: 0;
-  padding: 20px;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  right: 300px;
+  z-index: 50;
+
 }
 
 .ticketInfo {
