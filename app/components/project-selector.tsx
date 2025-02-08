@@ -16,7 +16,7 @@ const allProjects: Project[] = Array.from({ length: 20 }, (_, i) => ({
   organization: "HACKBEANPOT",
 }));
 
-export default function ProjectSelector() {
+export default function ProjectSelector({ projects }: { projects: Repository[] }) {
   const [visibleProjects, setVisibleProjects] = useState<Project[]>([]);
   const [startIndex, setStartIndex] = useState(0);
   const [isClient, setIsClient] = useState(false);
