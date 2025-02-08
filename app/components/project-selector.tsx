@@ -2,31 +2,30 @@
 
 import { useState, useEffect } from "react";
 import { IoReturnUpBackOutline } from "react-icons/io5";
+import { useRouter } from "next/navigation";
 
 interface Project {
-  id: number;
+  description: string;
+  id: string;
+  isPrivate: boolean;
   name: string;
-  organization: string;
+  url: string;
+  visibility: string;
 }
 
-// Mock data for repositories
-const allProjects: Project[] = Array.from({ length: 20 }, (_, i) => ({
-  id: i + 1,
-  name: `PROJECT\nJOHTO ${i + 1}`,
-  organization: "HACKBEANPOT",
-}));
-
-export default function ProjectSelector() {
-  const [visibleProjects, setVisibleProjects] = useState<Project[]>([]);
+export default function ProjectSelector({ repos }: { repos: Project[] }) {
+  const [visibleProjects, setVisibleProjects] = useState<Project[]>(repos);
   const [startIndex, setStartIndex] = useState(0);
   const [isClient, setIsClient] = useState(false);
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     setIsClient(true);
   }, []);
 
   useEffect(() => {
-    setVisibleProjects(allProjects.slice(startIndex, startIndex + 3));
+    setVisibleProjects(repos.slice(startIndex, startIndex + 3));
   }, [startIndex]);
 
   const slideLeft = () => {
@@ -34,13 +33,18 @@ export default function ProjectSelector() {
   };
 
   const slideRight = () => {
-    setStartIndex((prevIndex) =>
-      Math.min(allProjects.length - 3, prevIndex + 1)
-    );
+    setStartIndex((prevIndex) => Math.min(repos.length - 3, prevIndex + 1));
   };
 
   const handleConfirm = () => {
-    window.location.href = "/protected/uploadTranscript";
+    if (selectedProject) {
+      localStorage.setItem("selectedProject", JSON.stringify(selectedProject));
+      router.push("/protected/uploadTranscript");
+    }
+  };
+
+  const handleSelectProject = (project: Project) => {
+    setSelectedProject(project);
   };
 
   if (!isClient) return null;
@@ -53,7 +57,8 @@ export default function ProjectSelector() {
           onClick={() => history.back()}
         />
       </div>
-      {/* Header with hanging effect */}
+
+      {/* Header */}
       <div className="relative">
         <div className="absolute left-1/2 -translate-x-1/2 flex justify-center w-full">
           <div className="w-[1px] h-16 bg-white mx-32" />
@@ -66,7 +71,7 @@ export default function ProjectSelector() {
         </div>
       </div>
 
-      {/* Projects carousel */}
+      {/* Projects Carousel */}
       <div className="relative w-full max-w-[900px] flex items-center justify-center mt-24 mb-16">
         {/* Left Arrow */}
         <button
@@ -88,15 +93,22 @@ export default function ProjectSelector() {
           {visibleProjects.map((project) => (
             <div
               key={project.id}
-              className="shield-container w-[240px] h-[240px] flex-shrink-0 transition-transform duration-300 hover:scale-105"
-              style={{ backgroundImage: "url('/Shield.png')",    backgroundSize: "contain",    backgroundRepeat: "no-repeat",
-                backgroundPosition: "center", }}
+              className={`shield-container w-[240px] h-[240px] flex-shrink-0 transition-transform duration-300 hover:scale-105 cursor-pointer`}
+              style={{
+                backgroundImage: "url('/Shield.png')",
+                backgroundSize: "contain",
+                backgroundRepeat: "no-repeat",
+                backgroundPosition: "center",
+                backdropFilter:
+                  selectedProject === project
+                    ? "brightness(150%)"
+                    : "brightness(100%)",
+              }}
+              onClick={() => handleSelectProject(project)}
             >
-              <div className="shield relative  w-full h-full flex flex-col items-center justify-center text-center">
-                <div className="absolute top-5 left-0 right-0  py-3 shield-header">
-                  <span className="font-retro text-white text-sm tracking-wider">
-                    {project.organization}
-                  </span>
+              <div className="shield relative w-full h-full flex flex-col items-center justify-center text-center">
+                <div className="absolute top-5 left-0 right-0 py-3 shield-header">
+                  <span className="font-retro text-white text-sm tracking-wider"></span>
                 </div>
                 <span className="font-retro text-white text-xl mt-8 whitespace-pre-line leading-relaxed">
                   {project.name}
@@ -122,10 +134,15 @@ export default function ProjectSelector() {
         </button>
       </div>
 
-      {/* Confirm button */}
+      {/* Confirm Button */}
       <button
-        className="bg-[#0F2E4A] hover:bg-gray-900 text-white font-retro px-12 py-3 text-lg tracking-wider"
+        className={`px-12 py-3 text-lg tracking-wider font-retro text-white ${
+          selectedProject
+            ? "bg-[#0F2E4A] hover:bg-gray-900"
+            : "bg-gray-400 cursor-not-allowed"
+        }`}
         onClick={handleConfirm}
+        disabled={!selectedProject}
       >
         CONFIRM
       </button>
