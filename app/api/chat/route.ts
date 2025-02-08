@@ -41,12 +41,7 @@ export async function POST(req: Request) {
       max_tokens: 2000,
     });
 
-    console.log("Full Prompt is: " + fullPrompt);
-
-    console.log("Completion" + completion);
-
     const rawResponse = completion.choices[0]?.message?.content || '';
-    console.log(rawResponse);
 
     return NextResponse.json({
       success: true,

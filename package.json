@@ -25,12 +25,14 @@
     "openai-edge": "^1.2.2",
     "prettier": "^3.3.3",
     "react": "19.0.0",
-    "react-dom": "19.0.0"
+    "react-dom": "19.0.0",
+    "react-dropzone": "^14.3.5"
   },
   "devDependencies": {
     "@types/node": "22.10.2",
     "@types/react": "^19.0.2",
     "@types/react-dom": "19.0.2",
+    "@types/react-dropzone": "^4.2.2",
     "postcss": "8.4.49",
     "tailwind-merge": "^2.5.2",
     "tailwindcss": "3.4.17",
