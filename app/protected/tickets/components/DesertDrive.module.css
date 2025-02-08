@@ -183,6 +183,7 @@
 
 .ticketApprovalContainer {
   position: absolute;
+  min-width: 500px;
   top: 100px;
   right: 20px;
   z-index: 1000;
@@ -194,9 +195,25 @@
   transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
 }
 
-.ticketSlideOut {
-  transform: translateX(-200%);
+.slideOut {
+  transform: translateX(-300%);
 }
+
+.slideIn {
+  animation: slideInFromRight 0.5s ease-in-out;
+}
+
+@keyframes slideInFromRight {
+  from {
+    transform: translateX(150%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
 
 .ticketInfo {
   display: flex;

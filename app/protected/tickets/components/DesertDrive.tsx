@@ -16,42 +16,57 @@ const DesertDrive: React.FC = () => {
   const [currentTicket, setCurrentTicket] = useState<Ticket>(
     tickets[currentTicketIndex]
   );
+
+  const [isSliding, setIsSliding] = useState(false);
+  const [slideDirection, setSlideDirection] = useState<'in' | 'out'>('in');
+
+
   const router = useRouter();
   
   // Calculate progress percentage
   const progress = (currentTicketIndex / (tickets.length - 1)) * 100;
-
-  // Approve ticket
-  const handleApproveDenny = (approved: boolean) => {
-    setValidTickets((prevValidTickets) => [
-      ...prevValidTickets,
-      { ticket: currentTicket, approved },
-    ]);
-    moveToNextTicket();
-  };
-
-  // Move to next ticket
-  const moveToNextTicket = () => {
-    if (currentTicketIndex < tickets.length - 1) {
-      setCurrentTicketIndex((prevIndex) => prevIndex + 1);
-      setCurrentTicket(tickets[currentTicketIndex + 1]);
-    } else {
-      // Store tickets in session storage
-      sessionStorage.setItem("tickets", JSON.stringify(validTickets));
-
-      // Redirect to the summary page
-      router.push("/protected/summary");
-    }
-  };
+  
 
   const handleTicketChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setCurrentTicket((prevTicket) => {
-      if (!prevTicket) return prevTicket;
-      return {
-        ...prevTicket,
-        [e.target.name]: e.target.value,
-      };
-    });
+    setCurrentTicket(prevTicket => ({
+      ...prevTicket,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  const handleApproveDenny = async (approved: boolean) => {
+    setSlideDirection('out');
+    setIsSliding(true);
+
+    // Wait for the slide out animation
+    await new Promise(resolve => setTimeout(resolve, 500));
+
+    setValidTickets(prev => [...prev, { ticket: currentTicket, approved }]);
+
+    if (currentTicketIndex < tickets.length - 1) {
+      setCurrentTicket(tickets[currentTicketIndex + 1]);
+      setSlideDirection('in');
+      setCurrentTicketIndex(prev => prev + 1);
+    } else {
+      sessionStorage.setItem("tickets", JSON.stringify(validTickets));
+      router.push("/protected/summary");
+    }
+
+    // Reset sliding state after new ticket slides in
+    setTimeout(() => {
+      setIsSliding(false);
+    }, 500);
+  };
+
+  const getTicketClassName = () => {
+    const baseClass = styles.ticketApprovalContainer;
+    if (!isSliding) return baseClass;
+    
+    return `${baseClass} ${
+      slideDirection === 'out' 
+        ? styles.slideOut 
+        : styles.slideIn
+    }`;
   };
 
   return (
@@ -108,7 +123,7 @@ const DesertDrive: React.FC = () => {
           <CAR />
         </div>
 
-        <div className={styles.ticketApprovalContainer}>
+        <div className={getTicketClassName()}>
           {currentTicket && (
             <div className={styles.ticketInfo}>
               <h2>
