@@ -1,7 +1,7 @@
 export async function POST(request: Request) {
   try {
     // Parse the incoming JSON body
-    const { githubToken, repositoryId, issueTitle, issueBody } =
+    const { githubToken, repositoryId, title, description } =
       await request.json();
 
     // Define the GraphQL mutation string.
@@ -21,8 +21,8 @@ export async function POST(request: Request) {
     const variables = {
       input: {
         repositoryId, // the ID of the repository (you must fetch or know this beforehand)
-        title: issueTitle, // Map issueTitle to title
-        body: issueBody, // Map issueBody to body
+        title: title, // Map issueTitle to title
+        body: description, // Map issueBody to body
       },
     };
 

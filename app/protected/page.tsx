@@ -17,18 +17,6 @@ export default async function ProtectedPage() {
   const accessToken = data.session?.provider_token;
   console.log("Access Token", accessToken);
 
-  const response = await fetch("http://localhost:3000/api/createTicket", {
-    method: "POST",
-    body: JSON.stringify({
-      githubToken: accessToken,
-      repositoryId: "R_kgDOKlozBw",
-      issueTitle: "Test Issue",
-      issueBody: "This is a test issue",
-    }),
-  });
-  const gitProjects = await response.json();
-  console.log("Git Projects", gitProjects);
-
   return (
     <div className="flex-1 w-full flex flex-col gap-12">
       <div className="w-full">
