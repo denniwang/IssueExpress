@@ -31,7 +31,6 @@ const DesertDrive: React.FC = () => {
   const moveToNextTicket = () => {
     if (currentTicketIndex < tickets.length - 1) {
       setCurrentTicketIndex((prevIndex) => prevIndex + 1);
-      setCurrentTicket(tickets[currentTicketIndex]);
     } else {
       // Store tickets in session storage
       sessionStorage.setItem("tickets", JSON.stringify(validTickets));
