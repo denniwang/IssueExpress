@@ -2,13 +2,8 @@
 
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { Ticket } from "@/app/tickets/types";
 
-interface Ticket {
-  id: string;
-  title: string;
-  price: number;
-  quantity: number;
-}
 
 export default function SummaryPage() {
   const searchParams = useSearchParams();
@@ -21,15 +16,24 @@ export default function SummaryPage() {
     const parsedTickets = ticketsFromSession
       ? JSON.parse(ticketsFromSession)
       : [];
+
+    const approved = [];
+    const rejected = [];
+
     for (const ticket of parsedTickets) {
       if (ticket.approved) {
-        setApprovedTickets((prev) => [...prev, ticket.ticket]);
+        approved.push(ticket.ticket);
       } else {
-        setRejectedTickets((prev) => [...prev, ticket.ticket]);
+        rejected.push(ticket.ticket);
       }
     }
-    console.log(approvedTickets);
-    console.log(rejectedTickets);
+
+    // Set state after accumulating the tickets
+    setApprovedTickets(approved);
+    setRejectedTickets(rejected);
+
+    console.log(approved);
+    console.log(rejected);
   }, []); // Empty dependency array to run only on mount
 
   return (
@@ -37,9 +41,7 @@ export default function SummaryPage() {
       <h1 className="text-2xl font-bold mb-6">Order Summary</h1>
       <div className="space-y-4">
         {approvedTickets.map((ticket: Ticket, index: number) => (
-          <div key={index}>
-            <h2>{ticket.title}</h2>
-          </div>
+          <h2 key={index}>{ticket.name}</h2>
         ))}
       </div>
     </div>
