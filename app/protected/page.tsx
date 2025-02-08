@@ -17,11 +17,13 @@ export default async function ProtectedPage() {
   const accessToken = data.session?.provider_token;
   console.log("Access Token", accessToken);
 
-  const response = await fetch("http://localhost:3000/api/getAllRepos", {
+  const response = await fetch("http://localhost:3000/api/createTicket", {
     method: "POST",
     body: JSON.stringify({
       githubToken: accessToken,
-      githubUsername: user.user_metadata.user_name,
+      repositoryId: "R_kgDOKlozBw",
+      issueTitle: "Test Issue",
+      issueBody: "This is a test issue",
     }),
   });
   const gitProjects = await response.json();
