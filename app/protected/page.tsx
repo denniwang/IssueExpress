@@ -2,6 +2,8 @@ import FetchDataSteps from "@/components/tutorial/fetch-data-steps";
 import { createClient } from "@/utils/supabase/server";
 import { InfoIcon } from "lucide-react";
 import { redirect } from "next/navigation";
+import { useEffect } from "react";
+import { validTickets } from "./tickets/types";
 
 export default async function ProtectedPage() {
   const supabase = await createClient();
@@ -25,6 +27,11 @@ export default async function ProtectedPage() {
   });
   const gitProjects = await response.json();
   console.log("Git Projects", gitProjects);
+
+  useEffect(() => {
+    // Clear the valid tickets if the user returns to the upload screen
+    validTickets.length = 0;
+  }, []);
 
   return (
     <div className="flex-1 w-full flex flex-col gap-12">
