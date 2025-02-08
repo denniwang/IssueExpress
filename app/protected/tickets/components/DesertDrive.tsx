@@ -4,10 +4,9 @@ import type React from "react";
 import styles from "./DesertDrive.module.css";
 import { useState, useEffect } from "react";
 import { tickets as defaultTickets, Ticket } from "../types";
-import AssetCar from "./Car";
 import { TentTree, Car, MapPin } from "lucide-react"
 import { useRouter } from "next/navigation";
-
+import Background from "./Background";
 const DesertDrive: React.FC = () => {
   const [currentTicketIndex, setCurrentTicketIndex] = useState(0);
   const [validTickets, setValidTickets] = useState<Ticket[]>([]);
@@ -144,23 +143,7 @@ const DesertDrive: React.FC = () => {
             </div>
           </div>
 
-      {/* Render scene */}
-      <div className={styles.sky}>
-        <div className={styles.cloud}></div>
-        <div className={styles.cloud} style={{ animationDelay: "-15s" }}></div>
-        <div className={styles.cloud} style={{ animationDelay: "-30s" }}></div>
-      </div>
-      <div className={styles.desert}>
-        <div className={styles.cactusContainer}>
-          <div className={styles.cactus}></div>
-          <div className={styles.cactus} style={{ animationDelay: "-20s" }}></div>
-          <div className={styles.cactus} style={{ animationDelay: "-40s" }}></div>
-        </div>
-        <div className={styles.road}></div>
-      </div>
-      <div className={styles.car}>
-        <AssetCar />
-      </div>
+      <Background/>
 
       {/* Render current ticket */}
       {currentTicket && (
