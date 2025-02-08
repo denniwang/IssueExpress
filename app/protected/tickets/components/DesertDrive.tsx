@@ -40,7 +40,9 @@ const DesertDrive: React.FC = () => {
     }
   };
 
-  const handleTicketChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleTicketChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     setCurrentTicket((prevTicket) => {
       if (!prevTicket) return prevTicket;
       return {
@@ -90,7 +92,7 @@ const DesertDrive: React.FC = () => {
               />
             </h2>
             <p>
-              <strong>Assignee:</strong>
+              <strong>Assignee:&nbsp;</strong>
               <input
                 type="text"
                 name="assignee"
@@ -99,7 +101,7 @@ const DesertDrive: React.FC = () => {
               />
             </p>
             <p>
-              <strong>Label:</strong>
+              <strong>Label:&nbsp;</strong>
               <input
                 type="text"
                 name="label"
@@ -107,11 +109,51 @@ const DesertDrive: React.FC = () => {
                 onChange={handleTicketChange}
               />
             </p>
-            <textarea
-              name="description"
-              value={currentTicket.description}
-              onChange={handleTicketChange}
-            />
+            <div>
+              <strong>Description:&nbsp;</strong>
+              <br />
+              <textarea
+                name="description"
+                value={currentTicket.description}
+                onChange={handleTicketChange}
+              />
+            </div>
+            <div>
+              <strong>Start Date:&nbsp;</strong>
+              <input
+                type="date"
+                name="startDate"
+                value={
+                  currentTicket?.startDate
+                    ? currentTicket.startDate.toISOString().split("T")[0]
+                    : new Date().toISOString().split("T")[0]
+                }
+                onChange={(e) =>
+                  setCurrentTicket((prevTicket) => ({
+                    ...prevTicket,
+                    startDate: new Date(e.target.value),
+                  }))
+                }
+              />
+            </div>
+            <div>
+              <strong>End Date:&nbsp;</strong>
+              <input
+                type="date"
+                name="endDate"
+                value={
+                  currentTicket?.endDate
+                    ? currentTicket.endDate.toISOString().split("T")[0]
+                    : new Date().toISOString().split("T")[0]
+                }
+                onChange={(e) =>
+                  setCurrentTicket((prevTicket) => ({
+                    ...prevTicket,
+                    endDate: new Date(e.target.value),
+                  }))
+                }
+              />
+            </div>
             <div className={styles.ticketActions}>
               <button
                 onClick={() => handleApproveDenny(true)}
