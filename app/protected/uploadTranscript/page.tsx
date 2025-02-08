@@ -3,6 +3,7 @@
 import TranscriptUpload from "@/app/components/transcript-upload";
 import { useEffect } from "react";
 import { validTickets } from "../tickets/types";
+import { IoReturnUpBackOutline } from "react-icons/io5";
 
 export default function TranscriptPage() {
   useEffect(() => {
@@ -11,6 +12,12 @@ export default function TranscriptPage() {
   }, []);
   return (
     <div className="min-h-screen bg-[#808080] flex flex-col items-center">
+      <div className="absolute top-4 left-4">
+        <IoReturnUpBackOutline
+          className="text-white text-4xl cursor-pointer"
+          onClick={() => history.back()}
+        />
+      </div>
       {/* Header with hanging effect */}
       <div className="relative">
         <div className="absolute left-1/2 -translate-x-1/2 flex justify-center w-full">

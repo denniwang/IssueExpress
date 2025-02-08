@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { Ticket, tickets } from "@/app/protected/tickets/types"; // Import the Ticket type
 import { Button } from "@/components/ui/button";
+import { SiConvertio } from "react-icons/si";
+import { MdOutlineFileUpload } from "react-icons/md";
 
 const TranscriptUpload = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -136,7 +138,9 @@ const TranscriptUpload = () => {
         className="bg-white border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors hover:border-primary mb-4 flex flex-col justify-center items-center w-full"
         style={{ height: "200px" }}
       >
-        <Button className="bg-[#F7F7F7] text-black hover:bg-[#F7F7F7] hover:text-black rounded-none">Upload File</Button>
+        <Button className="bg-[#F7F7F7] text-black hover:bg-[#F7F7F7] hover:text-black rounded-none">
+          Upload File <MdOutlineFileUpload className="inlined-block ml-2" />{" "}
+        </Button>
         <input
           type="file"
           accept=".txt,image/*"
@@ -159,11 +163,8 @@ const TranscriptUpload = () => {
           </div>
         )}
       </div>
-      <Button
-        onClick={handleSubmit}
-        className="w-full text-white rounded"
-      >
-        CONVERT
+      <Button onClick={handleSubmit} className="w-full text-white rounded">
+        CONVERT <SiConvertio className="inline-block ml-2" />
       </Button>
     </div>
   );
