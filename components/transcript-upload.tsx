@@ -50,6 +50,7 @@ function TranscriptUpload() {
         if (response.ok) {
           const data = await response.json();
           setResponseData(data);
+          
           const rawResponse = data.data;
           const fixedResponse = `[${rawResponse}]`;
           try {
@@ -71,6 +72,7 @@ function TranscriptUpload() {
             console.error("Failed to parse JSON:", error);
           }
         } else {
+          console.log(`Error: ${response.status} - ${response.statusText}`);
           console.error("Error:", response.statusText);
         }
       } catch (error) {

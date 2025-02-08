@@ -36,7 +36,7 @@ export async function POST(req: Request) {
           content: fullPrompt,
         },
       ],
-      model: "llama-3.3-70b-versatile",
+      model: "llama-3.2-11b-vision-preview",
       temperature: 0.7,
       max_tokens: 2000,
     });
