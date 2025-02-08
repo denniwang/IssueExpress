@@ -1,10 +1,17 @@
+"use client";
 
 import TranscriptUpload from "@/components/transcript-upload";
+import { useEffect } from "react";
+import { validTickets } from "../tickets/types";
 
 export default function TranscriptPage() {
-    return (
-        <div>
-            <TranscriptUpload />
-        </div>
-    )
+  useEffect(() => {
+    // Clear valid tickets
+    validTickets.length = 0;
+  }, []);
+  return (
+    <div>
+      <TranscriptUpload />
+    </div>
+  );
 }
