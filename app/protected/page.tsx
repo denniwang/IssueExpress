@@ -2,7 +2,6 @@ import FetchDataSteps from "@/components/tutorial/fetch-data-steps";
 import { createClient } from "@/utils/supabase/server";
 import { InfoIcon } from "lucide-react";
 import { redirect } from "next/navigation";
-import { validTickets } from "./tickets/types";
 
 export default async function ProtectedPage() {
   const supabase = await createClient();
@@ -18,6 +17,10 @@ export default async function ProtectedPage() {
   const accessToken = data.session?.provider_token;
   console.log("Access Token", accessToken);
 
+  if (error) {
+    console.error('Auth error:', error);
+    return null;
+  }
 
   return (
     <div className="flex-1 w-full flex flex-col gap-12">

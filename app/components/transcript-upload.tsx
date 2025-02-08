@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { createWorker } from "tesseract.js";
 import { useRouter } from "next/navigation";
 import React from "react";
@@ -10,15 +10,13 @@ import { SiConvertio } from "react-icons/si";
 import { MdOutlineFileUpload } from "react-icons/md";
 
 const TranscriptUpload = () => {
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [ocrResult, setOcrResult] = useState<string>("");
-  const [ocrStatus, setOcrStatus] = useState<string>("");
   const router = useRouter();
 
   const handleFileChange = (file: File) => {
-    setSelectedFile(file);
+    setSelectedImage(file);
     setOcrResult(""); // Reset OCR result
-    setOcrStatus(""); // Reset status
 
     // Check if the file is an image or a text file
     if (file.type.startsWith("image/")) {
@@ -49,7 +47,6 @@ const TranscriptUpload = () => {
   };
 
   const readImageText = async (file: File) => {
-    setOcrStatus("Processing...");
     const worker = await createWorker("eng", 1, {
       logger: (m) => console.log(m), // Add logger here
     });
@@ -60,16 +57,14 @@ const TranscriptUpload = () => {
       } = await worker.recognize(file);
 
       setOcrResult(text);
-      setOcrStatus("Completed");
     } catch (error) {
       console.error(error);
-      setOcrStatus("Error occurred during processing.");
     } finally {
       await worker.terminate();
     }
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (data: FormData) => {
     // Proceed with the submission regardless of OCR result validity
     const userInput = ocrResult || ""; // Use OCR result or empty string if not available
 
@@ -127,6 +122,12 @@ const TranscriptUpload = () => {
   // Reference to the hidden file input
   const fileInputRef = React.useRef<HTMLInputElement | null>(null);
 
+  const userInput = ocrResult || "";
+
+  const handleSubmitCallback = useCallback(() => {
+    // ...
+  }, [userInput]);
+
   return (
     <div className="flex flex-col items-center p-5 rounded-lg bg-white">
       <p className="text-lg text-[#FF3C68]">UPLOADING FOR</p>
@@ -150,12 +151,12 @@ const TranscriptUpload = () => {
           style={{ display: "none" }} // Hide the default file input
           ref={fileInputRef} // Attach ref to the input
         />
-        {selectedFile && (
+        {selectedImage && (
           <div className="mt-4">
-            <p>Selected File: {selectedFile.name}</p>
-            {selectedFile.type.startsWith("image/") && (
+            <p>Selected File: {selectedImage.name}</p>
+            {selectedImage.type.startsWith("image/") && (
               <img
-                src={URL.createObjectURL(selectedFile)}
+                src={URL.createObjectURL(selectedImage)}
                 alt="Uploaded content"
                 style={{ marginTop: "15px", maxWidth: "100%" }}
               />
@@ -163,7 +164,7 @@ const TranscriptUpload = () => {
           </div>
         )}
       </div>
-      <Button onClick={handleSubmit} className="w-full text-white rounded bg-[#0F2E4A]">
+      <Button onClick={handleSubmitCallback} className="w-full text-white rounded bg-[#0F2E4A]">
         CONVERT <SiConvertio className="inline-block ml-2" />
       </Button>
     </div>
