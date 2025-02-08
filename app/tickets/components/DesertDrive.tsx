@@ -5,17 +5,25 @@ import styles from "./DesertDrive.module.css";
 import { useState } from "react";
 import { tickets, Ticket } from "../types";
 import Car from "./Car";
+import { useRouter } from "next/navigation";
 
 const DesertDrive: React.FC = () => {
-
-  const [validTickets, setValidTickets] = useState<{ticket: Ticket, approved: Boolean}[]>([]);
+  const [validTickets, setValidTickets] = useState<
+    { ticket: Ticket; approved: Boolean }[]
+  >([]);
   const [currentTicketIndex, setCurrentTicketIndex] = useState(0);
-  const [currentTicket, setCurrentTicket] = useState<Ticket | null>(tickets[currentTicketIndex]);
+  const [currentTicket, setCurrentTicket] = useState<Ticket | null>(
+    tickets[currentTicketIndex]
+  );
+  const router = useRouter();
 
   // Approve ticket
   const handleApproveDenny = (approved: boolean) => {
     const ticketToApprove = tickets[currentTicketIndex];
-    setValidTickets((prevValidTickets) => [...prevValidTickets, { ticket: ticketToApprove, approved }]);
+    setValidTickets((prevValidTickets) => [
+      ...prevValidTickets,
+      { ticket: ticketToApprove, approved },
+    ]);
     moveToNextTicket();
   };
 
@@ -25,7 +33,11 @@ const DesertDrive: React.FC = () => {
       setCurrentTicketIndex((prevIndex) => prevIndex + 1);
       setCurrentTicket(tickets[currentTicketIndex]);
     } else {
-      alert("All tickets have been processed!");
+      // Store tickets in session storage
+      sessionStorage.setItem("tickets", JSON.stringify(validTickets));
+
+      // Redirect to the summary page
+      router.push("/protected/summary");
     }
   };
 
@@ -41,8 +53,14 @@ const DesertDrive: React.FC = () => {
         {/* TODO move to container & redo */}
         <div className={styles.cactusContainer}>
           <div className={styles.cactus}></div>
-          <div className={styles.cactus} style={{ animationDelay: "-20s" }}></div>
-          <div className={styles.cactus} style={{ animationDelay: "-40s" }}></div>
+          <div
+            className={styles.cactus}
+            style={{ animationDelay: "-20s" }}
+          ></div>
+          <div
+            className={styles.cactus}
+            style={{ animationDelay: "-40s" }}
+          ></div>
         </div>
         <div className={styles.road}></div>
       </div>
@@ -55,14 +73,24 @@ const DesertDrive: React.FC = () => {
         {currentTicket && (
           <div className={styles.ticketInfo}>
             <h2>{currentTicket.name}</h2>
-            <p><strong>Assignee:</strong> {currentTicket.assignee}</p>
-            <p><strong>Label:</strong> {currentTicket.label}</p>
+            <p>
+              <strong>Assignee:</strong> {currentTicket.assignee}
+            </p>
+            <p>
+              <strong>Label:</strong> {currentTicket.label}
+            </p>
             <p>{currentTicket.description}</p>
             <div className={styles.ticketActions}>
-              <button onClick={() => handleApproveDenny(true)} className={styles.approveButton}>
+              <button
+                onClick={() => handleApproveDenny(true)}
+                className={styles.approveButton}
+              >
                 Approve
               </button>
-              <button onClick={() => handleApproveDenny(false)} className={styles.denyButton}>
+              <button
+                onClick={() => handleApproveDenny(false)}
+                className={styles.denyButton}
+              >
                 Deny
               </button>
             </div>
