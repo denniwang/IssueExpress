@@ -105,6 +105,13 @@ const DesertDrive: React.FC = () => {
     setTickets(updatedTickets); 
   };
 
+  const getRandomFutureDate = () => {
+    const daysFromNow = Math.floor(Math.random() * 5) + 1;
+    const date = new Date();
+    date.setDate(date.getDate() + daysFromNow);
+    return date.toISOString().split("T")[0];
+  };
+
   return (
     <div className={styles.scene}>
       {/* Render scene */}
@@ -187,7 +194,7 @@ const DesertDrive: React.FC = () => {
                 value={
                   currentTicket.endDate
                     ? currentTicket.endDate.toISOString().split("T")[0]
-                    : new Date().toISOString().split("T")[0]
+                    : getRandomFutureDate()
                 }
                 onChange={(e) => handleDateChange(e, "endDate")}
               />
