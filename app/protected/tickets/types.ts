@@ -5,6 +5,7 @@ export type Ticket = {
     description: string;
     startDate?: Date;
     endDate?: Date;
+    approved?: boolean;
 }
 
 export const tickets: Ticket[] = [];

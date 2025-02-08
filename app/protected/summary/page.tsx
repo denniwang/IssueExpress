@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { validTickets, Ticket } from "../tickets/types";
+import { Ticket } from "../tickets/types";
 import { MapPin, CheckCircle, XCircle } from 'lucide-react';
 import React from 'react';
 
@@ -10,10 +10,14 @@ export default function SummaryPage() {
   const [rejectedTickets, setRejectedTickets] = useState<Ticket[]>([]);
 
   useEffect(() => {
-    const parsedTickets = validTickets;
-    const approved = parsedTickets.filter(t => t.approved).map(t => t.ticket);
-    const rejected = parsedTickets.filter(t => !t.approved).map(t => t.ticket);
+    // Retrieve the tickets from localStorage
+    const storedTickets = JSON.parse(localStorage.getItem("tickets") || "[]");
 
+    // Filter the tickets based on approval status
+    const approved = storedTickets.filter((t: Ticket) => t.approved);
+    const rejected = storedTickets.filter((t: Ticket) => !t.approved);
+
+    // Update the state with the filtered tickets
     setApprovedTickets(approved);
     setRejectedTickets(rejected);
   }, []);

@@ -2,32 +2,83 @@
 
 import type React from "react";
 import styles from "./DesertDrive.module.css";
-import { useState } from "react";
-import { tickets, Ticket, validTickets } from "../types";
+import { useState, useEffect } from "react";
+import { tickets as defaultTickets, Ticket } from "../types";
 import Car from "./Car";
 import { useRouter } from "next/navigation";
 
 const DesertDrive: React.FC = () => {
   const [currentTicketIndex, setCurrentTicketIndex] = useState(0);
-  const [currentTicket, setCurrentTicket] = useState<Ticket>(
-    tickets[currentTicketIndex]
-  );
+  const [validTickets, setValidTickets] = useState<Ticket[]>([]);
+  const [tickets, setTickets] = useState<Ticket[]>(defaultTickets);
   const router = useRouter();
 
-  // Approve ticket
+  // Derive currentTicket from currentTicketIndex and tickets
+  const currentTicket = tickets[currentTicketIndex];
+
+  useEffect(() => {
+    // Load validTickets and currentTicketIndex from localStorage on component mount
+    const storedValidTickets = localStorage.getItem("validTickets");
+    if (storedValidTickets) {
+      setValidTickets(JSON.parse(storedValidTickets));
+    }
+
+    const storedTicketIndex = localStorage.getItem("currentTicketIndex");
+    if (storedTicketIndex) {
+      const ticketIndex = Number(storedTicketIndex);
+      setCurrentTicketIndex(ticketIndex);
+    }
+
+    // Load tickets from localStorage if available
+    const storedTickets = localStorage.getItem("tickets");
+    if (storedTickets) {
+      setTickets(JSON.parse(storedTickets));
+    }
+  }, []);
+
+  useEffect(() => {
+    // Save validTickets and currentTicketIndex to localStorage whenever they change
+    localStorage.setItem("validTickets", JSON.stringify(validTickets));
+    localStorage.setItem("currentTicketIndex", String(currentTicketIndex));
+
+    // Save tickets to localStorage whenever it changes
+    localStorage.setItem("tickets", JSON.stringify(tickets));
+  }, [validTickets, currentTicketIndex, tickets]);
+
+  useEffect(() => {
+    // Save validTickets to localStorage whenever they change
+    localStorage.setItem("validTickets", JSON.stringify(validTickets));
+  }, [validTickets]);
+
+  // Approve or deny ticket
   const handleApproveDenny = (approved: boolean) => {
-    validTickets.push({ ticket: currentTicket, approved });
+    if (!currentTicket) return;
+  
+    // Update the current ticket with the approval status
+    const updatedTickets = tickets.map((ticket, index) =>
+      index === currentTicketIndex ? { ...ticket, approved } : ticket
+    );
+  
+    // Update validTickets if approved
+    if (approved) {
+      setValidTickets([...validTickets, currentTicket]);
+    }
+  
+    localStorage.setItem("tickets", JSON.stringify(updatedTickets));
+    setTickets(updatedTickets); // Ensure state reflects updates
+    
+    // Move to the next ticket
     moveToNextTicket();
   };
 
   // Move to next ticket
   const moveToNextTicket = () => {
     if (currentTicketIndex < tickets.length - 1) {
-      setCurrentTicketIndex((prevIndex) => prevIndex + 1);
-      setCurrentTicket(tickets[currentTicketIndex + 1]);
+      const newIndex = currentTicketIndex + 1;
+      setCurrentTicketIndex(newIndex);
+      localStorage.setItem("currentTicketIndex", String(newIndex));
     } else {
-      tickets.length = 0;
-      // Redirect to the summary page
+      // Redirect to the summary page when all tickets are processed
       router.push("/protected/summary");
     }
   };
@@ -35,35 +86,38 @@ const DesertDrive: React.FC = () => {
   const handleTicketChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    setCurrentTicket((prevTicket) => {
-      if (!prevTicket) return prevTicket;
-      return {
-        ...prevTicket,
-        [e.target.name]: e.target.value,
-      };
-    });
+    const updatedTickets = tickets.map((ticket, index) =>
+      index === currentTicketIndex
+        ? { ...ticket, [e.target.name]: e.target.value }
+        : ticket
+    );
+    setTickets(updatedTickets); 
+  };
+
+  const handleDateChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    field: "startDate" | "endDate"
+  ) => {
+    const newDate = new Date(e.target.value);
+    const updatedTickets = tickets.map((ticket, index) =>
+      index === currentTicketIndex ? { ...ticket, [field]: newDate } : ticket
+    );
+    setTickets(updatedTickets); 
   };
 
   return (
     <div className={styles.scene}>
-      {/* TODO move to container & redo */}
+      {/* Render scene */}
       <div className={styles.sky}>
         <div className={styles.cloud}></div>
         <div className={styles.cloud} style={{ animationDelay: "-15s" }}></div>
         <div className={styles.cloud} style={{ animationDelay: "-30s" }}></div>
       </div>
       <div className={styles.desert}>
-        {/* TODO move to container & redo */}
         <div className={styles.cactusContainer}>
           <div className={styles.cactus}></div>
-          <div
-            className={styles.cactus}
-            style={{ animationDelay: "-20s" }}
-          ></div>
-          <div
-            className={styles.cactus}
-            style={{ animationDelay: "-40s" }}
-          ></div>
+          <div className={styles.cactus} style={{ animationDelay: "-20s" }}></div>
+          <div className={styles.cactus} style={{ animationDelay: "-40s" }}></div>
         </div>
         <div className={styles.road}></div>
       </div>
@@ -71,14 +125,7 @@ const DesertDrive: React.FC = () => {
         <Car />
       </div>
 
-      {tickets.length == 0 && (
-        <div className={styles.ticketApprovalContainer}>
-          <h1>No tickets to approve</h1>
-          <button onClick={moveToNextTicket}>Continue to summary</button>
-        </div>
-        )}
-
-      {/* TODO move this to right of screen in empty space*/}
+      {/* Render current ticket */}
       {currentTicket && (
         <div className={styles.ticketApprovalContainer}>
           <div className={styles.ticketInfo}>
@@ -95,7 +142,7 @@ const DesertDrive: React.FC = () => {
               <input
                 type="text"
                 name="assignee"
-                value={currentTicket.assignee}
+                value={currentTicket.assignee || ""}
                 onChange={handleTicketChange}
               />
             </p>
@@ -125,16 +172,11 @@ const DesertDrive: React.FC = () => {
                 type="date"
                 name="startDate"
                 value={
-                  currentTicket?.startDate
+                  currentTicket.startDate
                     ? currentTicket.startDate.toISOString().split("T")[0]
                     : new Date().toISOString().split("T")[0]
                 }
-                onChange={(e) =>
-                  setCurrentTicket((prevTicket) => ({
-                    ...prevTicket,
-                    startDate: new Date(e.target.value),
-                  }))
-                }
+                onChange={(e) => handleDateChange(e, "startDate")}
               />
             </div>
             <div>
@@ -143,21 +185,11 @@ const DesertDrive: React.FC = () => {
                 type="date"
                 name="endDate"
                 value={
-                  currentTicket?.endDate
+                  currentTicket.endDate
                     ? currentTicket.endDate.toISOString().split("T")[0]
-                    : (() => {
-                        const randomDaysAhead = Math.floor(Math.random() * 3) + 1; 
-                        const currentDate = new Date();
-                        currentDate.setDate(currentDate.getDate() + randomDaysAhead); 
-                        return currentDate.toISOString().split("T")[0];
-                      })()
+                    : new Date().toISOString().split("T")[0]
                 }
-                onChange={(e) =>
-                  setCurrentTicket((prevTicket) => ({
-                    ...prevTicket,
-                    endDate: new Date(e.target.value),
-                  }))
-                }
+                onChange={(e) => handleDateChange(e, "endDate")}
               />
             </div>
             <div className={styles.ticketActions}>
