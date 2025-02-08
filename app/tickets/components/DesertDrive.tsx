@@ -10,12 +10,10 @@ const DesertDrive: React.FC = () => {
 
   const [validTickets, setValidTickets] = useState<{ticket: Ticket, approved: Boolean}[]>([]);
   const [currentTicketIndex, setCurrentTicketIndex] = useState(0);
-  const [currentTicket, setCurrentTicket] = useState<Ticket | null>(tickets[currentTicketIndex]);
-
+ 
   // Approve ticket
   const handleApproveDenny = (approved: boolean) => {
-    const ticketToApprove = tickets[currentTicketIndex];
-    setValidTickets((prevValidTickets) => [...prevValidTickets, { ticket: ticketToApprove, approved }]);
+    setValidTickets((prevValidTickets) => [...prevValidTickets, { ticket: tickets[currentTicketIndex], approved }]);
     moveToNextTicket();
   };
 
@@ -23,7 +21,6 @@ const DesertDrive: React.FC = () => {
   const moveToNextTicket = () => {
     if (currentTicketIndex < tickets.length - 1) {
       setCurrentTicketIndex((prevIndex) => prevIndex + 1);
-      setCurrentTicket(tickets[currentTicketIndex]);
     } else {
       alert("All tickets have been processed!");
     }
@@ -52,12 +49,12 @@ const DesertDrive: React.FC = () => {
 
       {/* TODO move this to right of screen in empty space*/}
       <div className={styles.ticketApprovalContainer}>
-        {currentTicket && (
+        {tickets[currentTicketIndex] && (
           <div className={styles.ticketInfo}>
-            <h2>{currentTicket.name}</h2>
-            <p><strong>Assignee:</strong> {currentTicket.assignee}</p>
-            <p><strong>Label:</strong> {currentTicket.label}</p>
-            <p>{currentTicket.description}</p>
+            <h2>{tickets[currentTicketIndex].name}</h2>
+            <p><strong>Assignee:</strong> {tickets[currentTicketIndex].assignee}</p>
+            <p><strong>Label:</strong> {tickets[currentTicketIndex].label}</p>
+            <p>{tickets[currentTicketIndex].description}</p>
             <div className={styles.ticketActions}>
               <button onClick={() => handleApproveDenny(true)} className={styles.approveButton}>
                 Approve
