@@ -128,9 +128,9 @@ const TranscriptUpload = () => {
   const fileInputRef = React.useRef<HTMLInputElement | null>(null);
 
   return (
-    <div className="flex flex-col items-center p-5 rounded-lg bg-[#F7F7F7]">
-      <p className="text-lg text-[#9E9E9E]">UPLOADING FOR</p>
-      <h1 className="text-2xl font-bold mb-4">PROJECT NAME</h1>
+    <div className="flex flex-col items-center p-5 rounded-lg bg-white">
+      <p className="text-lg text-[#FF3C68]">UPLOADING FOR</p>
+      <h1 className="text-2xl font-bold mb-4 text-[#0F2E4A]">PROJECT NAME</h1>
       <div
         onDrop={handleDrop}
         onDragOver={handleDragOver}
@@ -138,7 +138,7 @@ const TranscriptUpload = () => {
         className="bg-white border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors hover:border-primary mb-4 flex flex-col justify-center items-center w-full"
         style={{ height: "200px" }}
       >
-        <Button className="bg-[#F7F7F7] text-black hover:bg-[#F7F7F7] hover:text-black rounded-none">
+        <Button className="bg-[#F7F7F7] text-[#0F2E4A] hover:bg-[#F7F7F7] hover:text-black rounded-none">
           Upload File <MdOutlineFileUpload className="inlined-block ml-2" />{" "}
         </Button>
         <input
@@ -163,7 +163,7 @@ const TranscriptUpload = () => {
           </div>
         )}
       </div>
-      <Button onClick={handleSubmit} className="w-full text-white rounded">
+      <Button onClick={handleSubmit} className="w-full text-white rounded bg-[#0F2E4A]">
         CONVERT <SiConvertio className="inline-block ml-2" />
       </Button>
     </div>
