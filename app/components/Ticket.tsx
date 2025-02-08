@@ -58,7 +58,7 @@ const Ticket: React.FC<TicketProps> = ({
             <FaEdit size={30} />
           </div>
           <textarea
-            className="text-lg text-gray-600 mt-4 w-full focus:outline-none"
+            className="text-md text-gray-600 mt-4 w-full focus:outline-none"
             value={ticket.description}
             onChange={handleTicketChange}
             name="description"
