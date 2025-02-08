@@ -137,7 +137,12 @@ const DesertDrive: React.FC = () => {
                 value={
                   currentTicket?.endDate
                     ? currentTicket.endDate.toISOString().split("T")[0]
-                    : new Date().toISOString().split("T")[0]
+                    : (() => {
+                        const randomDaysAhead = Math.floor(Math.random() * 3) + 1; 
+                        const currentDate = new Date();
+                        currentDate.setDate(currentDate.getDate() + randomDaysAhead); 
+                        return currentDate.toISOString().split("T")[0];
+                      })()
                 }
                 onChange={(e) =>
                   setCurrentTicket((prevTicket) => ({
