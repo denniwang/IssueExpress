@@ -4,6 +4,7 @@ import TranscriptUpload from "@/app/components/transcript-upload";
 import { useEffect } from "react";
 import { validTickets } from "../tickets/types";
 import { IoReturnUpBackOutline } from "react-icons/io5";
+import RoadFooter from "@/app/components/RoadFooter";
 
 export default function TranscriptPage() {
   useEffect(() => {
@@ -31,6 +32,7 @@ export default function TranscriptPage() {
       <div className="mt-20 bg-black pt-3 rounded-lg px-1 pb-1" style={{ width: "550px" }}>
         <TranscriptUpload />
       </div>
+      <RoadFooter />
     </div>
   );
 }
