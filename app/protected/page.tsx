@@ -10,15 +10,21 @@ export default async function ProtectedPage() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const { data, error } = await supabase.auth.getSession();
-  const accessToken = data.session?.provider_token;
-
-  
-  console.log(accessToken);
-
   if (!user) {
     return redirect("/sign-in");
   }
+  const { data, error } = await supabase.auth.getSession();
+  const accessToken = data.session?.provider_token;
+  console.log("Access Token", accessToken);
+  const response = await fetch("http://localhost:3000/api/getAllGitProjects", {
+    method: "POST",
+    body: JSON.stringify({
+      githubToken: accessToken,
+      githubUsername: user.user_metadata.github_username,
+    }),
+  });
+  const gitProjects = await response.json();
+  console.log("Git Projects", gitProjects);
 
   return (
     <div className="flex-1 w-full flex flex-col gap-12">
