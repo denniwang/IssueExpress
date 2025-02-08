@@ -80,8 +80,8 @@ const DesertDrive: React.FC = () => {
       </div>
 
       {/* TODO move this to right of screen in empty space*/}
-      <div className={styles.ticketApprovalContainer}>
-        {currentTicket && (
+      {currentTicket && (
+        <div className={styles.ticketApprovalContainer}>
           <div className={styles.ticketInfo}>
             <h2>
               <input
@@ -116,6 +116,8 @@ const DesertDrive: React.FC = () => {
                 name="description"
                 value={currentTicket.description}
                 onChange={handleTicketChange}
+                className="w-full"
+                rows={4}
               />
             </div>
             <div>
@@ -169,8 +171,8 @@ const DesertDrive: React.FC = () => {
               </button>
             </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };
