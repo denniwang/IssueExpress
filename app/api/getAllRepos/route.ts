@@ -1,5 +1,3 @@
-import { createClient } from "@/utils/supabase/server";
-
 export async function POST(req: Request) {
   const { githubToken, githubUsername } = await req.json();
   const query = `query {

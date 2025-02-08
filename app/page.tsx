@@ -1,16 +1,21 @@
-import Hero from "@/components/hero";
-import ConnectSupabaseSteps from "@/components/tutorial/connect-supabase-steps";
-import SignUpUserSteps from "@/components/tutorial/sign-up-user-steps";
-import { hasEnvVars } from "@/utils/supabase/check-env-vars";
+import { signInAction } from "@/app/actions";
+import { SubmitButton } from "@/components/submit-button";
 
-export default async function Home() {
+export default async function Login() {
   return (
-    <>
-      <Hero />
-      <main className="flex-1 flex flex-col gap-6 px-4">
-        <h2 className="font-medium text-xl mb-4">Next steps</h2>
-        {hasEnvVars ? <SignUpUserSteps /> : <ConnectSupabaseSteps />}
-      </main>
-    </>
+    <div
+      id="login-body"
+      className="w-screen h-screen flex items-center justify-center bg-cover bg-center"
+      style={{ backgroundImage: "url('/login-background.png')" }}
+    >
+      <div className="flex flex-col justify-between text-lg" style={{ height: "85%"}}>
+        <h1 className="mt-11 text-white text-6xl">Project Name</h1>
+        <form className="flex flex-row justify-center">
+          <SubmitButton pendingText="Signing In..." formAction={signInAction}>
+            Sign in to GitHub
+          </SubmitButton>
+        </form>
+      </div>
+    </div>
   );
 }
