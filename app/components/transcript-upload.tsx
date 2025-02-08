@@ -133,7 +133,7 @@ const TranscriptUpload = () => {
         onDrop={handleDrop}
         onDragOver={handleDragOver}
         onClick={() => fileInputRef.current?.click()} // Trigger file input on click
-        className="bg-white border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors hover:border-primary mb-4 flex justify-center items-center w-full"
+        className="bg-white border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors hover:border-primary mb-4 flex flex-col justify-center items-center w-full"
         style={{ height: "200px" }}
       >
         <Button className="bg-[#F7F7F7] text-black hover:bg-[#F7F7F7] hover:text-black rounded-none">Upload File</Button>
@@ -165,10 +165,6 @@ const TranscriptUpload = () => {
       >
         CONVERT
       </Button>
-
-      {/* <p className="mt-4 font-semibold">Status: {ocrStatus}</p>
-      <h3 className="mt-4 font-semibold">Extracted Text:</h3>
-      <pre className="bg-gray-100 p-2 rounded border">{ocrResult}</pre> */}
     </div>
   );
 };
