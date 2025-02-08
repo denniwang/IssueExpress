@@ -88,10 +88,12 @@ export default function ProjectSelector() {
           {visibleProjects.map((project) => (
             <div
               key={project.id}
-              className="shield-container w-[240px] h-[280px] flex-shrink-0 transition-transform duration-300 hover:scale-105"
+              className="shield-container w-[240px] h-[240px] flex-shrink-0 transition-transform duration-300 hover:scale-105"
+              style={{ backgroundImage: "url('/Shield.png')",    backgroundSize: "contain",    backgroundRepeat: "no-repeat",
+                backgroundPosition: "center", }}
             >
-              <div className="shield relative bg-[#145D98] w-full h-full flex flex-col items-center justify-center text-center border-[3px] border-white">
-                <div className="absolute top-0 left-0 right-0 bg-[#FF3C68] py-3 shield-header">
+              <div className="shield relative  w-full h-full flex flex-col items-center justify-center text-center">
+                <div className="absolute top-5 left-0 right-0  py-3 shield-header">
                   <span className="font-retro text-white text-sm tracking-wider">
                     {project.organization}
                   </span>
