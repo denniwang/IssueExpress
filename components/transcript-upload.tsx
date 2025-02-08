@@ -1,7 +1,7 @@
 "use client";
 import { useState, useCallback } from "react";
 import { useDropzone } from "react-dropzone";
-import { Ticket, tickets } from "../app/tickets/types";
+import { Ticket, tickets } from "../app/protected/tickets/types";
 import { useRouter } from "next/navigation";
 
 export default function TranscriptUpload() {
@@ -68,7 +68,7 @@ export default function TranscriptUpload() {
 
             tickets.push(...newTickets);
             setParsedResponse(parsedJson); 
-            router.push("/tickets");
+            router.push("/protected/tickets");
           } catch (error) {
             console.error("Failed to parse JSON:", error);
           }
