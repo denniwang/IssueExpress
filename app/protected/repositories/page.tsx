@@ -25,7 +25,7 @@ export default async function Home() {
 
   return (
     <main className="min-h-screen bg-[#808080] flex flex-col items-center">
-      <ProjectSelector repos={gitProjects.data.user.repositories.nodes} />
+      <ProjectSelector repos={gitProjects?.data?.user?.repositories?.nodes} />
       <RoadFooter />
     </main>
   );

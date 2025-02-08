@@ -25,7 +25,7 @@ export default function ProjectSelector({ repos }: { repos: Project[] }) {
   }, []);
 
   useEffect(() => {
-    setVisibleProjects(repos.slice(startIndex, startIndex + 3));
+    setVisibleProjects(repos ? repos.slice(startIndex, startIndex + 3) : []);
   }, [startIndex]);
 
   const slideLeft = () => {
@@ -50,7 +50,7 @@ export default function ProjectSelector({ repos }: { repos: Project[] }) {
   if (!isClient) return null;
 
   return (
-    <div className="w-full flex flex-col items-center h-screen bg-gradient-to-b from-[#145D98] to-[#F7E3E1]">
+    <div className="w-full flex flex-col items-center h-screen bg-gradient-to-b from-[#145D98] to-[#F7E3E1] font-retro">
       <div className="absolute top-4 left-4">
         <IoReturnUpBackOutline
           className="text-white text-4xl cursor-pointer"
@@ -90,6 +90,13 @@ export default function ProjectSelector({ repos }: { repos: Project[] }) {
 
         {/* Projects Container */}
         <div className="flex gap-16 overflow-hidden">
+          {visibleProjects.length === 0 && (
+            <>
+            <div>
+              <h1 className="text-white text-3xl">You have no visible projects at this time.</h1>
+            </div>
+            </>
+          )}
           {visibleProjects.map((project) => (
             <div
               key={project.id}

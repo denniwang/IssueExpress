@@ -58,7 +58,7 @@ const Ticket: React.FC<TicketProps> = ({
             <FaEdit size={30} />
           </div>
           <textarea
-            className="text-lg text-gray-600 mt-4 w-full focus:outline-none"
+            className="text-md text-gray-600 mt-4 w-full focus:outline-none"
             value={ticket.description}
             onChange={handleTicketChange}
             name="description"
@@ -105,7 +105,7 @@ const Ticket: React.FC<TicketProps> = ({
           </div>
         </div>
 
-        <div className="flex flex-col mt-2">
+        <div className="mt-2">
           <label className="text-xs text-gray-500" htmlFor="label">
             LABEL
           </label>
@@ -129,7 +129,7 @@ const Ticket: React.FC<TicketProps> = ({
           value={
             ticket.startDate
               ? ticket.startDate.toISOString().split("T")[0]
-              : getRandomFutureDate()
+              : new Date().toISOString().split("T")[0]
           }
           onChange={(event) => handleDateChange(event, "startDate")}
           name="startDate"

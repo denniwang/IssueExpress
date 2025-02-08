@@ -18,7 +18,7 @@ const TranscriptUpload = () => {
     setOcrResult(""); // Reset OCR result
 
     // Check if the file is an image or a text file
-    if (file.type.startsWith("image/")) {
+    if (file?.type.startsWith("image/")) {
       readImageText(file); // Perform OCR if it's an image
     } else if (file.type === "text/plain") {
       const reader = new FileReader();
