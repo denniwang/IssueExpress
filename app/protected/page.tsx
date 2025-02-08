@@ -17,12 +17,11 @@ export default async function ProtectedPage() {
   const accessToken = data.session?.provider_token;
   console.log("Access Token", accessToken);
 
-  const response = await fetch("http://localhost:3000/api/getProjectFromRepo", {
+  const response = await fetch("http://localhost:3000/api/getAllRepos", {
     method: "POST",
     body: JSON.stringify({
       githubToken: accessToken,
-      owner: "DonnyLe",
-      repo: "Reversi",
+      githubUsername: user.user_metadata.user_name,
     }),
   });
   const gitProjects = await response.json();
