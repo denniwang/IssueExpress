@@ -6,7 +6,7 @@ export default async function Login() {
   return (
     <div id="login-body" className="w-screen h-screen flex items-center justify-center bg-cover bg-center" style={{ backgroundImage: "url('/login-background.png')" }}>
       <form>
-        <SubmitButton pendingText="Signing In..." formAction={signInAction} className="bg-white text-black">
+        <SubmitButton pendingText="Signing In..." formAction={signInAction} className="bg-white text-black hover:bg-gray-400 hover:text-black">
           Sign in to GitHub
         </SubmitButton>
       </form>
