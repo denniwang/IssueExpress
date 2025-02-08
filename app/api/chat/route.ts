@@ -47,12 +47,13 @@ export async function POST(req: Request) {
       success: true,
       data: rawResponse,
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Groq API Error:", error);
     return NextResponse.json(
       {
         success: false,
-        message: error.message || "Error contacting Groq API",
+        message:
+          error instanceof Error ? error.message : "Error contacting Groq API",
       },
       { status: 500 }
     );

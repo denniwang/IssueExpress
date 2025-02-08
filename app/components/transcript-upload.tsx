@@ -6,6 +6,7 @@ import { Ticket, tickets } from "@/app/protected/tickets/types";
 import { Button } from "@/components/ui/button";
 import { SiConvertio } from "react-icons/si";
 import { MdOutlineFileUpload } from "react-icons/md";
+import Image from "next/image";
 
 const TranscriptUpload = () => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
@@ -120,8 +121,8 @@ const TranscriptUpload = () => {
   const handleSubmitCallback = useCallback(() => {
     const formData = new FormData();
     formData.append("ocrResult", userInput);
-    handleSubmit(formData); // Trigger handleSubmit
-  }, [userInput]);
+    handleSubmit(formData);
+  }, [userInput, handleSubmit]);
 
   return (
     <div className="flex flex-col items-center p-5 rounded-lg bg-white">
@@ -150,10 +151,12 @@ const TranscriptUpload = () => {
           <div className="mt-4">
             <p>Selected File: {selectedImage.name}</p>
             {selectedImage.type.startsWith("image/") && (
-              <img
+              <Image
                 src={URL.createObjectURL(selectedImage)}
                 alt="Uploaded content"
-                style={{ marginTop: "15px", maxWidth: "100%" }}
+                width={500}
+                height={300}
+                className="mt-4 max-w-full"
               />
             )}
           </div>
