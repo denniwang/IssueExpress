@@ -113,7 +113,13 @@
   right: 0;
   height: 5px;
   background-color: #fff;
-  background-image: linear-gradient(to right, #fff 0%, #fff 50%, transparent 50%, transparent 100%);
+  background-image: linear-gradient(
+    to right,
+    #fff 0%,
+    #fff 50%,
+    transparent 50%,
+    transparent 100%
+  );
   background-size: 40px 100%;
   animation: moveRoadLines 1s linear infinite;
 }
@@ -135,6 +141,7 @@
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 1;
 }
 
 .form {
@@ -174,6 +181,47 @@
   background-color: #27ae60;
 }
 
+.ticketApprovalContainer {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 1000;
+  margin: 0;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.ticketInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ticketActions {
+  display: flex;
+  gap: 10px;
+}
+
+.approveButton,
+.denyButton {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.approveButton {
+  background-color: #4caf50;
+  color: white;
+}
+
+.denyButton {
+  background-color: #f44336;
+  color: white;
+}
+
 @keyframes moveLeft {
   from {
     transform: translateX(100vw);
@@ -191,4 +239,3 @@
     background-position: -40px 0;
   }
 }
-

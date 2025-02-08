@@ -2,12 +2,14 @@
 import { useState, useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import { tickets, ticket } from "../app/tickets/types";
+import { useRouter } from "next/navigation";
 
 export default function TranscriptUpload() {
   const [files, setFiles] = useState<File[]>([]);
   const [userInput, setUserInput] = useState<string>("");
   const [responseData, setResponseData] = useState<any>(null);
   const [parsedResponse, setParsedResponse] = useState<any>(null);
+  const router = useRouter();
 
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
@@ -65,8 +67,8 @@ export default function TranscriptUpload() {
             });
 
             tickets.push(...newTickets);
-  
             setParsedResponse(parsedJson); 
+            router.push("/tickets");
           } catch (error) {
             console.error("Failed to parse JSON:", error);
           }
