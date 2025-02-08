@@ -2,7 +2,7 @@
 
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Ticket } from "@/app/tickets/types";
+import { validTickets, Ticket } from "../tickets/types";
 
 
 export default function SummaryPage() {
@@ -12,10 +12,7 @@ export default function SummaryPage() {
   const [total, setTotal] = useState(0);
 
   useEffect(() => {
-    const ticketsFromSession = sessionStorage.getItem("tickets");
-    const parsedTickets = ticketsFromSession
-      ? JSON.parse(ticketsFromSession)
-      : [];
+    const parsedTickets = validTickets;
 
     const approved = [];
     const rejected = [];

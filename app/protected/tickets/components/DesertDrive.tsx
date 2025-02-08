@@ -3,14 +3,11 @@
 import type React from "react";
 import styles from "./DesertDrive.module.css";
 import { useState } from "react";
-import { tickets, Ticket } from "../types";
+import { tickets, Ticket, validTickets } from "../types";
 import Car from "./Car";
 import { useRouter } from "next/navigation";
 
 const DesertDrive: React.FC = () => {
-  const [validTickets, setValidTickets] = useState<
-    { ticket: Ticket; approved: Boolean }[]
-  >([]);
   const [currentTicketIndex, setCurrentTicketIndex] = useState(0);
   const [currentTicket, setCurrentTicket] = useState<Ticket>(
     tickets[currentTicketIndex]
@@ -19,10 +16,7 @@ const DesertDrive: React.FC = () => {
 
   // Approve ticket
   const handleApproveDenny = (approved: boolean) => {
-    setValidTickets((prevValidTickets) => [
-      ...prevValidTickets,
-      { ticket: currentTicket, approved },
-    ]);
+    validTickets.push({ ticket: currentTicket, approved });
     moveToNextTicket();
   };
 
@@ -32,9 +26,6 @@ const DesertDrive: React.FC = () => {
       setCurrentTicketIndex((prevIndex) => prevIndex + 1);
       setCurrentTicket(tickets[currentTicketIndex + 1]);
     } else {
-      // Store tickets in session storage
-      sessionStorage.setItem("tickets", JSON.stringify(validTickets));
-
       // Redirect to the summary page
       router.push("/protected/summary");
     }

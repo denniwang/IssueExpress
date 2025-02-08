@@ -8,3 +8,5 @@ export type Ticket = {
 }
 
 export const tickets: Ticket[] = [];
+
+export const validTickets: { ticket: Ticket; approved: Boolean }[] = [];
