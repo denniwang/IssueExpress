@@ -11,6 +11,7 @@ export default function SummaryPage() {
 
   useEffect(() => {
     const parsedTickets = validTickets;
+    console.log(validTickets)
     const approved = parsedTickets.filter(t => t.approved).map(t => t.ticket);
     const rejected = parsedTickets.filter(t => !t.approved).map(t => t.ticket);
 
