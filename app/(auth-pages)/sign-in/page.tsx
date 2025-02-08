@@ -10,7 +10,7 @@ export default async function Login() {
     >
       <div className="flex flex-col justify-between" style={{ height: "95%"}}>
         <h1 className="text-white text-3xl">Project Name</h1>
-        <form>
+        <form className="flex flex-row justify-center">
           <SubmitButton pendingText="Signing In..." formAction={signInAction}>
             Sign in to GitHub
           </SubmitButton>
