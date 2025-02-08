@@ -60,7 +60,11 @@ const DesertDrive: React.FC = () => {
     if (!currentTicket) return;
 
     // Trigger the animation
-    setAnimationClass(styles.slideOut);
+    if (currentTicketIndex < tickets.length - 1) {
+      setAnimationClass(styles.slideOutAndBack);
+    } else {
+      setAnimationClass(styles.slideOut);
+    }
 
     setTimeout(() => {
       // Update the current ticket with the approval status
