@@ -1,7 +1,7 @@
 "use client";
 import { useState, useCallback } from "react";
 import { useDropzone } from "react-dropzone";
-import { tickets, ticket } from "../app/tickets/types";
+import { Ticket, tickets } from "../app/tickets/types";
 import { useRouter } from "next/navigation";
 
 export default function TranscriptUpload() {
@@ -57,7 +57,7 @@ export default function TranscriptUpload() {
           try {
             const parsedJson = JSON.parse(fixedResponse);
 
-            const newTickets: ticket[] = parsedJson.map((item: any) => {
+            const newTickets: Ticket[] = parsedJson.map((item: any) => {
               return {
                 assignee: item.assignee || "Unassigned",
                 name: item.name || "TBD",

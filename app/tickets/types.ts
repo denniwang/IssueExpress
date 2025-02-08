@@ -1,8 +1,8 @@
-export type ticket = {
-    assignee: string;
+export type Ticket = {
+    assignee?: string;
     name: string;
     label: string;
     description: string;
 }
 
-export let tickets: ticket[] = [];
+export const tickets: Ticket[] = [];

@@ -1,86 +1,86 @@
-"use client"
+"use client";
 
-import type React from "react"
-import styles from "./DesertDrive.module.css"
-import { useState } from "react"
-import { tickets } from "../types"
+import type React from "react";
+import styles from "./DesertDrive.module.css";
+import { useState } from "react";
+import Car from "./Car";
+import { Ticket } from "../types";
 
 const DesertDrive: React.FC = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    message: "",
-  })
+  const tickets: Ticket[] = [];
+  const [currentTicket, setCurrentTicket] = useState(
+    tickets.length > 0
+      ? tickets[0]
+      : {
+          // TODO replace w real data?
+          name: "Ticket Nitle",
+          description: "Ticket Description",
+          label: "dev",
+        }
+  );
+  const [currentTicketIndex, setCurrentTicketIndex] = useState(0);
+  const [validTickets, setValidTickets] = useState<Ticket[]>([]);
 
-  const [validTickets, setValidTickets] = useState<typeof tickets>([])
-  const [currentTicketIndex, setCurrentTicketIndex] = useState(0)
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target
-    setFormData((prevState) => ({
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setCurrentTicket((prevState) => ({
       ...prevState,
       [name]: value,
-    }))
-  }
+    }));
+  };
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    console.log("Form submitted:", formData)
+    e.preventDefault();
+    console.log("Form submitted:", currentTicket);
     // Here you would typically send the data to a server
-    alert("Form submitted successfully!")
-    console.log(tickets);
-  }
+    alert("Form submitted successfully!");
+  };
 
   // Approve ticket
   const handleApprove = () => {
-    const ticketToApprove = tickets[currentTicketIndex]
-    setValidTickets((prevValidTickets) => [...prevValidTickets, ticketToApprove])
-    moveToNextTicket()
-  }
+    const ticketToApprove = currentTicket;
+    setValidTickets((prevValidTickets) => [...prevValidTickets, ticketToApprove]);
+    moveToNextTicket();
+  };
 
   // Deny ticket
   const handleDeny = () => {
-    moveToNextTicket()
-  }
+    moveToNextTicket();
+  };
 
-  // Move to next ticket
+  // Move to the next ticket
   const moveToNextTicket = () => {
     if (currentTicketIndex < tickets.length - 1) {
-      setCurrentTicketIndex((prevIndex) => prevIndex + 1)
+      setCurrentTicketIndex((prevIndex) => prevIndex + 1);
     } else {
-      alert("All tickets have been processed!")
+      alert("All tickets have been processed!");
     }
-  }
-
-  const currentTicket = tickets[currentTicketIndex]
-
-  console.log("Tickets:", tickets);
-  console.log("Current Ticket Index:", currentTicketIndex);
+  };
 
   return (
     <div className={styles.scene}>
       <div className={styles.sky}>
+        {/* Randomize positions make component */}
         <div className={styles.cloud}></div>
         <div className={styles.cloud} style={{ animationDelay: "-15s" }}></div>
         <div className={styles.cloud} style={{ animationDelay: "-30s" }}></div>
       </div>
       <div className={styles.desert}>
+        {/* Randomize positions make component -> split css, add more above and below road but cannot be road*/}
         <div className={styles.cactusContainer}>
           <div className={styles.cactus}></div>
-          <div className={styles.cactus} style={{ animationDelay: "-20s" }}></div>
-          <div className={styles.cactus} style={{ animationDelay: "-40s" }}></div>
+          <div className={styles.cactus} style={{ animationDelay: "-20s" }} />
+          <div
+            className={styles.cactus}
+            style={{ animationDelay: "-40s" }}
+          ></div>
         </div>
         <div className={styles.road}></div>
       </div>
       <div className={styles.car}>
-        <svg width="200" height="120" viewBox="0 0 200 120">
-          <rect x="20" y="40" width="160" height="50" fill="#ff4d4d" />
-          <rect x="10" y="70" width="180" height="30" fill="#ff4d4d" />
-          <rect x="40" y="30" width="80" height="40" fill="#87ceeb" />
-          <circle cx="50" cy="100" r="20" fill="#333" />
-          <circle cx="150" cy="100" r="20" fill="#333" />
-          <circle cx="50" cy="100" r="15" fill="#666" />
-          <circle cx="150" cy="100" r="15" fill="#666" />
-        </svg>
+        <Car />
       </div>
 
       <div className={styles.ticketApprovalContainer}>
@@ -101,37 +101,37 @@ const DesertDrive: React.FC = () => {
       </div>
 
       <div className={styles.formContainer}>
+        {/* Make bigger */}
         <form onSubmit={handleSubmit} className={styles.form}>
-          <h2>Ticket Name</h2>
+          <h2>Project Name</h2>
           <input
             type="text"
             name="name"
-            value={formData.name}
+            value={currentTicket.name}
             onChange={handleInputChange}
-            placeholder="Your Name"
-            required
-          />
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleInputChange}
-            placeholder="Your Email"
+            placeholder="Ticket Name"
             required
           />
           <textarea
-            name="message"
-            value={formData.message}
+            name="description"
+            value={currentTicket.description}
             onChange={handleInputChange}
-            placeholder="Your Message"
+            placeholder="Ticket Description"
             required
           ></textarea>
-          <button type="submit">Send</button>
+          <input
+            type="text"
+            name="label"
+            value={currentTicket.label}
+            onChange={handleInputChange}
+            placeholder="Ticket Label"
+            required
+          />
+          <button type="submit">Confirm Ticket</button>
         </form>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default DesertDrive
-
+export default DesertDrive;
