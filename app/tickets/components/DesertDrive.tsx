@@ -16,14 +16,12 @@ const DesertDrive: React.FC = () => {
           // TODO replace w real data?
           name: "Ticket Nitle",
           description: "Ticket Description",
-          label: "dev"
+          label: "dev",
         }
   );
 
   const handleInputChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
     setCurrentTicket((prevState) => ({
@@ -49,10 +47,7 @@ const DesertDrive: React.FC = () => {
         {/* Randomize positions make component -> split css, add more above and below road but cannot be road*/}
         <div className={styles.cactusContainer}>
           <div className={styles.cactus}></div>
-          <div
-            className={styles.cactus}
-            style={{ animationDelay: "-20s" }}
-          />
+          <div className={styles.cactus} style={{ animationDelay: "-20s" }} />
           <div
             className={styles.cactus}
             style={{ animationDelay: "-40s" }}
@@ -60,7 +55,9 @@ const DesertDrive: React.FC = () => {
         </div>
         <div className={styles.road}></div>
       </div>
-      <div className={styles.car}><Car /></div>
+      <div className={styles.car}>
+        <Car />
+      </div>
       <div className={styles.formContainer}>
         {/* Make bigger */}
         <form onSubmit={handleSubmit} className={styles.form}>

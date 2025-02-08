@@ -4,3 +4,5 @@ export type Ticket = {
     label: string;
     description: string;
 }
+
+export const tickets: Ticket[] = [];
