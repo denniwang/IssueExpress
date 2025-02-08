@@ -17,15 +17,6 @@ export default async function ProtectedPage() {
   const { data, error } = await supabase.auth.getSession();
   const accessToken = data.session?.provider_token;
   console.log("Access Token", accessToken);
-  const response = await fetch("http://localhost:3000/api/getAllGitProjects", {
-    method: "POST",
-    body: JSON.stringify({
-      githubToken: accessToken,
-      githubUsername: user.user_metadata.user_name,
-    }),
-  });
-  const gitProjects = await response.json();
-  console.log("Git Projects", gitProjects);
 
 
   return (

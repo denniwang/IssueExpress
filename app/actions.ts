@@ -46,6 +46,7 @@ async function signInWithGithub() {
     provider: "github",
     options: {
       redirectTo: `http://localhost:3000/auth/callback`,
+      scopes: "repo project",
     },
   });
   return { data, error };
