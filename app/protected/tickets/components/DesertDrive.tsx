@@ -26,6 +26,7 @@ const DesertDrive: React.FC = () => {
       setCurrentTicketIndex((prevIndex) => prevIndex + 1);
       setCurrentTicket(tickets[currentTicketIndex + 1]);
     } else {
+      tickets.length = 0;
       // Redirect to the summary page
       router.push("/protected/summary");
     }
@@ -69,6 +70,13 @@ const DesertDrive: React.FC = () => {
       <div className={styles.car}>
         <Car />
       </div>
+
+      {tickets.length == 0 && (
+        <div className={styles.ticketApprovalContainer}>
+          <h1>No tickets to approve</h1>
+          <button onClick={moveToNextTicket}>Continue to summary</button>
+        </div>
+        )}
 
       {/* TODO move this to right of screen in empty space*/}
       {currentTicket && (
