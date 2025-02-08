@@ -20,7 +20,7 @@ export default async function ProtectedPage() {
     method: "POST",
     body: JSON.stringify({
       githubToken: accessToken,
-      githubUsername: user.user_metadata.github_username,
+      githubUsername: user.user_metadata.user_name,
     }),
   });
   const gitProjects = await response.json();
