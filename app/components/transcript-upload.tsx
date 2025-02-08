@@ -1,10 +1,8 @@
-"use client";
-
 import { useState, useCallback } from "react";
 import { createWorker } from "tesseract.js";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { Ticket, tickets } from "@/app/protected/tickets/types"; // Import the Ticket type
+import { Ticket, tickets } from "@/app/protected/tickets/types";
 import { Button } from "@/components/ui/button";
 import { SiConvertio } from "react-icons/si";
 import { MdOutlineFileUpload } from "react-icons/md";
@@ -48,7 +46,7 @@ const TranscriptUpload = () => {
 
   const readImageText = async (file: File) => {
     const worker = await createWorker("eng", 1, {
-      logger: (m) => console.log(m), // Add logger here
+      logger: (m) => console.log(m),
     });
 
     try {
@@ -65,8 +63,7 @@ const TranscriptUpload = () => {
   };
 
   const handleSubmit = async (data: FormData) => {
-    // Proceed with the submission regardless of OCR result validity
-    const userInput = ocrResult || ""; // Use OCR result or empty string if not available
+    const userInput = ocrResult || "";
 
     if (userInput) {
       try {
@@ -82,13 +79,11 @@ const TranscriptUpload = () => {
           const data = await response.json();
           const rawResponse = data.data;
 
-          // Validate and fix the JSON response
           const fixedResponse = rawResponse.startsWith("[")
             ? rawResponse
             : `[${rawResponse}]`;
 
           try {
-            // Check if the response is valid JSON
             const parsedJson = JSON.parse(fixedResponse);
             console.log(parsedJson);
 
@@ -101,11 +96,10 @@ const TranscriptUpload = () => {
               };
             });
 
-            tickets.push(...newTickets); // Save the new tickets
-            router.push("/protected/tickets"); // Navigate to the tickets page
+            tickets.push(...newTickets);
+            router.push("/protected/tickets");
           } catch (error) {
             console.error("Failed to parse JSON:", error);
-            // Optionally, you can still navigate even if parsing fails
             router.push("/protected/tickets");
           }
         } else {
@@ -119,13 +113,14 @@ const TranscriptUpload = () => {
     }
   };
 
-  // Reference to the hidden file input
   const fileInputRef = React.useRef<HTMLInputElement | null>(null);
 
   const userInput = ocrResult || "";
 
   const handleSubmitCallback = useCallback(() => {
-    // ...
+    const formData = new FormData();
+    formData.append("ocrResult", userInput);
+    handleSubmit(formData); // Trigger handleSubmit
   }, [userInput]);
 
   return (
@@ -135,12 +130,12 @@ const TranscriptUpload = () => {
       <div
         onDrop={handleDrop}
         onDragOver={handleDragOver}
-        onClick={() => fileInputRef.current?.click()} // Trigger file input on click
+        onClick={() => fileInputRef.current?.click()}
         className="bg-white border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors hover:border-primary mb-4 flex flex-col justify-center items-center w-full"
         style={{ height: "200px" }}
       >
         <Button className="bg-[#F7F7F7] text-[#0F2E4A] hover:bg-[#F7F7F7] hover:text-black rounded-none">
-          Upload File <MdOutlineFileUpload className="inlined-block ml-2" />{" "}
+          Upload File <MdOutlineFileUpload className="inlined-block ml-2" />
         </Button>
         <input
           type="file"
@@ -148,8 +143,8 @@ const TranscriptUpload = () => {
           onChange={(e) =>
             e.target.files && handleFileChange(e.target.files[0])
           }
-          style={{ display: "none" }} // Hide the default file input
-          ref={fileInputRef} // Attach ref to the input
+          style={{ display: "none" }}
+          ref={fileInputRef}
         />
         {selectedImage && (
           <div className="mt-4">
@@ -164,7 +159,10 @@ const TranscriptUpload = () => {
           </div>
         )}
       </div>
-      <Button onClick={handleSubmitCallback} className="w-full text-white rounded bg-[#0F2E4A]">
+      <Button
+        onClick={handleSubmitCallback}
+        className="w-full text-white rounded bg-[#0F2E4A]"
+      >
         CONVERT <SiConvertio className="inline-block ml-2" />
       </Button>
     </div>
