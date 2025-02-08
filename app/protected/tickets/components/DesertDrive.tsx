@@ -3,20 +3,30 @@
 import type React from "react";
 import styles from "./DesertDrive.module.css";
 import { useState } from "react";
-import { tickets, Ticket, validTickets } from "../types";
-import Car from "./Car";
+import { tickets, Ticket } from "../types";
+import CAR from "./Car";
 import { useRouter } from "next/navigation";
+import { TentTree, Car, MapPin } from "lucide-react"
 
 const DesertDrive: React.FC = () => {
+  const [validTickets, setValidTickets] = useState<
+    { ticket: Ticket; approved: Boolean }[]
+  >([]);
   const [currentTicketIndex, setCurrentTicketIndex] = useState(0);
   const [currentTicket, setCurrentTicket] = useState<Ticket>(
     tickets[currentTicketIndex]
   );
   const router = useRouter();
 
+  // Calculate progress percentage
+  const progress = (currentTicketIndex / (tickets.length - 1)) * 100;
+
   // Approve ticket
   const handleApproveDenny = (approved: boolean) => {
-    validTickets.push({ ticket: currentTicket, approved });
+    setValidTickets((prevValidTickets) => [
+      ...prevValidTickets,
+      { ticket: currentTicket, approved },
+    ]);
     moveToNextTicket();
   };
 
@@ -26,15 +36,15 @@ const DesertDrive: React.FC = () => {
       setCurrentTicketIndex((prevIndex) => prevIndex + 1);
       setCurrentTicket(tickets[currentTicketIndex + 1]);
     } else {
-      tickets.length = 0;
+      // Store tickets in session storage
+      sessionStorage.setItem("tickets", JSON.stringify(validTickets));
+
       // Redirect to the summary page
       router.push("/protected/summary");
     }
   };
 
-  const handleTicketChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
+  const handleTicketChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setCurrentTicket((prevTicket) => {
       if (!prevTicket) return prevTicket;
       return {
@@ -45,138 +55,109 @@ const DesertDrive: React.FC = () => {
   };
 
   return (
-    <div className={styles.scene}>
-      {/* TODO move to container & redo */}
-      <div className={styles.sky}>
-        <div className={styles.cloud}></div>
-        <div className={styles.cloud} style={{ animationDelay: "-15s" }}></div>
-        <div className={styles.cloud} style={{ animationDelay: "-30s" }}></div>
-      </div>
-      <div className={styles.desert}>
-        {/* TODO move to container & redo */}
-        <div className={styles.cactusContainer}>
-          <div className={styles.cactus}></div>
-          <div
-            className={styles.cactus}
-            style={{ animationDelay: "-20s" }}
-          ></div>
-          <div
-            className={styles.cactus}
-            style={{ animationDelay: "-40s" }}
-          ></div>
-        </div>
-        <div className={styles.road}></div>
-      </div>
-      <div className={styles.car}>
-        <Car />
-      </div>
+    <div className="relative w-full">
+      {/* Progress Bar */}
+<div className="w-full bg-gray-800 fixed top-0 left-0 z-50 p-4">
+  <div className="flex items-center justify-between max-w-6xl mx-auto relative">
+    <div className="p-2 rounded-lg bg-gray-700">
+      <TentTree className="w-5 h-5 text-white" />
+    </div>
 
-      {tickets.length == 0 && (
-        <div className={styles.ticketApprovalContainer}>
-          <h1>No tickets to approve</h1>
-          <button onClick={moveToNextTicket}>Continue to summary</button>
-        </div>
-        )}
+    <div className="flex-1 mx-8 relative h-1">
+      <div 
+        className="absolute top-0 left-0 h-full bg-gradient-to-r from-blue-400 to-blue-600 transition-all duration-300"
+        style={{ width: `${progress}%` }}
+      />
+      
+      <div className="absolute top-0 left-0 w-full h-full bg-gray-600" />
 
-      {/* TODO move this to right of screen in empty space*/}
-      {currentTicket && (
+      <div className="absolute top-1/2 -translate-y-1/2 z-10 transition-all duration-300"
+        style={{ left: `${progress}%` }}>
+        <Car className="w-6 h-6 text-white -translate-x-1/2" />
+      </div>
+    </div>
+
+    <div className="p-2 rounded-lg bg-gray-700">
+      <MapPin className="w-5 h-5 text-white" />
+    </div>
+  </div>
+</div>
+      <div className={styles.scene}>
+        <div className={styles.sky}>
+          <div className={styles.cloud}></div>
+          <div className={styles.cloud} style={{ animationDelay: "-15s" }}></div>
+          <div className={styles.cloud} style={{ animationDelay: "-30s" }}></div>
+        </div>
+        <div className={styles.desert}>
+          <div className={styles.cactusContainer}>
+            <div className={styles.cactus}></div>
+            <div
+              className={styles.cactus}
+              style={{ animationDelay: "-20s" }}
+            ></div>
+            <div
+              className={styles.cactus}
+              style={{ animationDelay: "-40s" }}
+            ></div>
+          </div>
+          <div className={styles.road}></div>
+        </div>
+        <div className={styles.car}>
+          <CAR />
+        </div>
+
         <div className={styles.ticketApprovalContainer}>
-          <div className={styles.ticketInfo}>
-            <h2>
-              <input
-                type="text"
-                name="name"
-                value={currentTicket.name}
-                onChange={handleTicketChange}
-              />
-            </h2>
-            <p>
-              <strong>Assignee:&nbsp;</strong>
-              <input
-                type="text"
-                name="assignee"
-                value={currentTicket.assignee}
-                onChange={handleTicketChange}
-              />
-            </p>
-            <p>
-              <strong>Label:&nbsp;</strong>
-              <input
-                type="text"
-                name="label"
-                value={currentTicket.label}
-                onChange={handleTicketChange}
-              />
-            </p>
-            <div>
-              <strong>Description:&nbsp;</strong>
-              <br />
+          {currentTicket && (
+            <div className={styles.ticketInfo}>
+              <h2>
+                <input
+                  type="text"
+                  name="name"
+                  value={currentTicket.name}
+                  onChange={handleTicketChange}
+                />
+              </h2>
+              <p>
+                <strong>Assignee:</strong>
+                <input
+                  type="text"
+                  name="assignee"
+                  value={currentTicket.assignee}
+                  onChange={handleTicketChange}
+                />
+              </p>
+              <p>
+                <strong>Label:</strong>
+                <input
+                  type="text"
+                  name="label"
+                  value={currentTicket.label}
+                  onChange={handleTicketChange}
+                />
+              </p>
               <textarea
                 name="description"
                 value={currentTicket.description}
                 onChange={handleTicketChange}
-                className="w-full"
-                rows={4}
               />
+              <div className={styles.ticketActions}>
+                <button
+                  onClick={() => handleApproveDenny(true)}
+                  className={styles.approveButton}
+                >
+                  Approve
+                </button>
+                <button
+                  onClick={() => handleApproveDenny(false)}
+                  className={styles.denyButton}
+                >
+                  Deny
+                </button>
+              </div>
             </div>
-            <div>
-              <strong>Start Date:&nbsp;</strong>
-              <input
-                type="date"
-                name="startDate"
-                value={
-                  currentTicket?.startDate
-                    ? currentTicket.startDate.toISOString().split("T")[0]
-                    : new Date().toISOString().split("T")[0]
-                }
-                onChange={(e) =>
-                  setCurrentTicket((prevTicket) => ({
-                    ...prevTicket,
-                    startDate: new Date(e.target.value),
-                  }))
-                }
-              />
-            </div>
-            <div>
-              <strong>End Date:&nbsp;</strong>
-              <input
-                type="date"
-                name="endDate"
-                value={
-                  currentTicket?.endDate
-                    ? currentTicket.endDate.toISOString().split("T")[0]
-                    : (() => {
-                        const randomDaysAhead = Math.floor(Math.random() * 3) + 1; 
-                        const currentDate = new Date();
-                        currentDate.setDate(currentDate.getDate() + randomDaysAhead); 
-                        return currentDate.toISOString().split("T")[0];
-                      })()
-                }
-                onChange={(e) =>
-                  setCurrentTicket((prevTicket) => ({
-                    ...prevTicket,
-                    endDate: new Date(e.target.value),
-                  }))
-                }
-              />
-            </div>
-            <div className={styles.ticketActions}>
-              <button
-                onClick={() => handleApproveDenny(true)}
-                className={styles.approveButton}
-              >
-                Approve
-              </button>
-              <button
-                onClick={() => handleApproveDenny(false)}
-                className={styles.denyButton}
-              >
-                Deny
-              </button>
-            </div>
-          </div>
+          )}
         </div>
-      )}
+      </div>
     </div>
   );
 };
