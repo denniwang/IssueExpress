@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { createWorker } from 'tesseract.js';
+import Image from 'next/image';
 
 const OcrReader = () => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
@@ -44,11 +45,12 @@ const OcrReader = () => {
       <input type='file' accept='image/*' onChange={handleImageChange} />
 
       {selectedImage && (
-        <img
+        <Image
           src={URL.createObjectURL(selectedImage)}
           alt='Uploaded content'
           width={350}
-          style={{ marginTop: 15 }}
+          height={350}
+          className="max-w-sm rounded border bg-gray-50 p-4"
         />
       )}
 
