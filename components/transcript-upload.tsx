@@ -4,13 +4,12 @@ import { useDropzone } from "react-dropzone";
 import { Ticket, tickets } from "../app/protected/tickets/types";
 import { useRouter } from "next/navigation";
 
-export default function TranscriptUpload() {
+function TranscriptUpload() {
   const [files, setFiles] = useState<File[]>([]);
   const [userInput, setUserInput] = useState<string>("");
   const [responseData, setResponseData] = useState<any>(null);
   const [parsedResponse, setParsedResponse] = useState<any>(null);
   const router = useRouter();
-
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     setFiles(acceptedFiles);
@@ -29,7 +28,6 @@ export default function TranscriptUpload() {
       }
     });
   }, []);
-
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
@@ -67,7 +65,7 @@ export default function TranscriptUpload() {
             });
 
             tickets.push(...newTickets);
-            setParsedResponse(parsedJson); 
+            setParsedResponse(parsedJson);
             router.push("/protected/tickets");
           } catch (error) {
             console.error("Failed to parse JSON:", error);
@@ -113,7 +111,7 @@ export default function TranscriptUpload() {
         )}
       </div>
 
-      <button 
+      <button
         onClick={handleContinueClick}
         className="mt-8 px-6 py-2 bg-primary text-white font-semibold rounded-lg shadow-md hover:bg-primary/80 focus:outline-none focus:ring-2 focus:ring-primary"
       >
@@ -123,7 +121,9 @@ export default function TranscriptUpload() {
       {parsedResponse && (
         <div className="mt-8 p-4 bg-gray-100 rounded-lg shadow-md max-h-96 overflow-y-auto">
           <h4 className="text-lg font-semibold">Parsed Response:</h4>
-          <pre className="whitespace-pre-wrap break-all">{JSON.stringify(parsedResponse, null, 2)}</pre>
+          <pre className="whitespace-pre-wrap break-all">
+            {JSON.stringify(parsedResponse, null, 2)}
+          </pre>
         </div>
       )}
     </div>
