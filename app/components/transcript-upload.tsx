@@ -5,6 +5,7 @@ import { createWorker } from "tesseract.js";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { Ticket, tickets } from "@/app/protected/tickets/types"; // Import the Ticket type
+import { Button } from "@/components/ui/button";
 
 const TranscriptUpload = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -125,16 +126,17 @@ const TranscriptUpload = () => {
   const fileInputRef = React.useRef<HTMLInputElement | null>(null);
 
   return (
-    <div className="flex flex-col items-center">
-      <h2 className="text-lg font-bold mb-4">Upload Transcript or Image</h2>
+    <div className="flex flex-col items-center p-5 rounded-lg bg-[#F7F7F7]">
+      <p className="text-lg text-[#9E9E9E]">UPLOADING FOR</p>
+      <h1 className="text-2xl font-bold mb-4">PROJECT NAME</h1>
       <div
         onDrop={handleDrop}
         onDragOver={handleDragOver}
         onClick={() => fileInputRef.current?.click()} // Trigger file input on click
-        className="border-2 border-dashed border-gray-400 rounded-lg p-8 text-center cursor-pointer transition-colors hover:border-primary"
-        style={{ width: "300px", height: "200px" }}
+        className="bg-white border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors hover:border-primary mb-4 flex flex-col justify-center items-center w-full"
+        style={{ height: "200px" }}
       >
-        <p>Drag and drop a file here, or click to select</p>
+        <Button className="bg-[#F7F7F7] text-black hover:bg-[#F7F7F7] hover:text-black rounded-none">Upload File</Button>
         <input
           type="file"
           accept=".txt,image/*"
@@ -157,16 +159,12 @@ const TranscriptUpload = () => {
           </div>
         )}
       </div>
-      <button
+      <Button
         onClick={handleSubmit}
-        className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
+        className="w-full text-white rounded"
       >
-        Submit for Processing
-      </button>
-
-      <p className="mt-4 font-semibold">Status: {ocrStatus}</p>
-      <h3 className="mt-4 font-semibold">Extracted Text:</h3>
-      <pre className="bg-gray-100 p-2 rounded border">{ocrResult}</pre>
+        CONVERT
+      </Button>
     </div>
   );
 };

@@ -10,8 +10,20 @@ export default function TranscriptPage() {
     validTickets.length = 0;
   }, []);
   return (
-    <div>
-      <TranscriptUpload />
+    <div className="min-h-screen bg-[#808080] flex flex-col items-center">
+      {/* Header with hanging effect */}
+      <div className="relative">
+        <div className="absolute left-1/2 -translate-x-1/2 flex justify-center w-full">
+          <div className="w-[1px] h-16 bg-white mx-32" />
+          <div className="w-[1px] h-16 bg-white mx-32" />
+        </div>
+        <div className="bg-[#9A9A9A] px-16 py-4 mt-16 shadow-lg">
+          <h1 className="text-3xl font-retro text-white tracking-[0.2em]">UPLOAD TRANSCRIPT</h1>
+        </div>
+      </div>
+      <div className="mt-20 bg-black pt-3 rounded-lg px-1 pb-1" style={{ width: "550px" }}>
+        <TranscriptUpload />
+      </div>
     </div>
   );
 }
