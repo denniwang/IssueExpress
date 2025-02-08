@@ -16,7 +16,7 @@ const allProjects: Project[] = Array.from({ length: 20 }, (_, i) => ({
   organization: "HACKBEANPOT",
 }));
 
-export default function ProjectSelector({ projects }: { projects: Repository[] }) {
+export default function ProjectSelector() {
   const [visibleProjects, setVisibleProjects] = useState<Project[]>([]);
   const [startIndex, setStartIndex] = useState(0);
   const [isClient, setIsClient] = useState(false);
@@ -89,8 +89,12 @@ export default function ProjectSelector({ projects }: { projects: Repository[] }
             <div
               key={project.id}
               className="shield-container w-[240px] h-[240px] flex-shrink-0 transition-transform duration-300 hover:scale-105"
-              style={{ backgroundImage: "url('/Shield.png')",    backgroundSize: "contain",    backgroundRepeat: "no-repeat",
-                backgroundPosition: "center", }}
+              style={{
+                backgroundImage: "url('/Shield.png')",
+                backgroundSize: "contain",
+                backgroundRepeat: "no-repeat",
+                backgroundPosition: "center",
+              }}
             >
               <div className="shield relative  w-full h-full flex flex-col items-center justify-center text-center">
                 <div className="absolute top-5 left-0 right-0  py-3 shield-header">
