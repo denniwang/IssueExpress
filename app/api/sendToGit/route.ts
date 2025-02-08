@@ -70,27 +70,3 @@ export async function POST(req: Request) {
     );
   }
 }
-
-// New function to handle sending chat data to GitHub
-export async function sendToGit(req: Request) {
-  try {
-    // Parse incoming JSON body
-    const { userInput } = await req.json();
-    console.log("User Input: " + userInput);
-
-
-
-    return NextResponse.json({
-      success: true,
-      data: rawResponse,
-    });
-  } catch (error) {
-    return NextResponse.json(
-      {
-        success: false,
-        message: "Error processing chat data",
-      },
-      { status: 500 }
-    );
-  }
-}
