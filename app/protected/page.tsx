@@ -10,6 +10,12 @@ export default async function ProtectedPage() {
     data: { user },
   } = await supabase.auth.getUser();
 
+  const { data, error } = await supabase.auth.getSession();
+  const accessToken = data.session?.provider_token;
+
+  
+  console.log(accessToken);
+
   if (!user) {
     return redirect("/sign-in");
   }
