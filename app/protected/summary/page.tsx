@@ -251,7 +251,7 @@ export default function SummaryPage() {
       <style jsx global>
         {styles}
       </style>
-      <div className="flex h-screen bg-[url('/desert-bg.jpg')] bg-cover bg-center">
+      <div className="flex h-screen bg-cover bg-center">
         <div
           className="flex-1 p-8 overflow-y-auto bg-amber-50/80 backdrop-blur-sm"
           onClick={() => setActiveTicket(null)}
