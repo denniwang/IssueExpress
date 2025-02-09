@@ -1,5 +1,11 @@
-import { Geist } from "next/font/google";
+import { Silkscreen } from "next/font/google";
 import "./globals.css";
+
+const silkscreen = Silkscreen({
+  weight: '400',
+  subsets: ['latin'],
+  display: 'swap',
+});
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -7,14 +13,9 @@ const defaultUrl = process.env.VERCEL_URL
 
 export const metadata = {
   metadataBase: new URL(defaultUrl),
-  title: "IssueExpreess",
+  title: "IssueExpress",
   description: "The future of project management",
 };
-
-const geistSans = Geist({
-  display: "swap",
-  subsets: ["latin"],
-});
 
 export default function RootLayout({
   children,
@@ -22,7 +23,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={geistSans.className} suppressHydrationWarning>
+    <html lang="en" className={silkscreen.className} suppressHydrationWarning>
+      <head />
       <body>
         <div>{children}</div>
       </body>

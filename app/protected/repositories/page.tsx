@@ -1,6 +1,7 @@
 import RoadFooter from "@/app/components/RoadFooter";
 import ProjectSelector from "../../components/project-selector";
 import { createClient } from "@/utils/supabase/server";
+import { redirect } from "next/navigation";
 
 export default async function Home() {
   const supabase = await createClient();
@@ -11,8 +12,11 @@ export default async function Home() {
 
   const { data } = await supabase.auth.getSession();
   const accessToken = data.session?.provider_token;
-  console.log("Access Token", accessToken);
-
+  if (!accessToken) {
+    supabase.auth.signOut();
+    redirect("/sign-in");
+  }
+  
   const defaultUrl = process.env.VERCEL_URL
     ? `https://${process.env.VERCEL_URL}`
     : "http://localhost:3000";

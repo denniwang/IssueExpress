@@ -9,23 +9,21 @@ import { handleSubmit } from "@/app/actions";
 import { useRouter } from "next/navigation";
 import HangingHeader from "@/app/components/HangingHeader";
 
-// Update the SVG path components with precise node connections
+// Update the SVG path components with taller viewBox and adjusted coordinates
 const LeftToRightPath = () => (
   <svg
-    className="absolute w-full h-48 -z-10 pointer-events-none"
-    viewBox="0 0 800 200"
+    className="absolute w-full h-96 -z-10 pointer-events-none"
+    viewBox="0 0 800 350"
   >
     <path
-      // Start from center of left node (x: node radius), curve to center of right node
-      d="M 12 12 C 250 12, 550 188, 788 188"
+      d="M 12 12 C 400 12, 600 338, 788 338"
       stroke="#0F2E4A"
       strokeWidth="24"
       fill="none"
       className="opacity-60"
     />
     <path
-      // Start from center of left node (x: node radius), curve to center of right node
-      d="M 12 12 C 250 12, 550 188, 788 188"
+      d="M 12 12 C 400 12, 600 338, 788 338"
       stroke="#FFFFFF"
       strokeWidth="2"
       fill="none"
@@ -37,20 +35,18 @@ const LeftToRightPath = () => (
 
 const RightToLeftPath = () => (
   <svg
-    className="absolute w-full h-48 -z-10 pointer-events-none"
-    viewBox="0 0 800 200"
+    className="absolute w-full h-96 -z-10 pointer-events-none"
+    viewBox="0 0 800 350"
   >
     <path
-      // Start from center of right node, curve to center of left node
-      d="M 788 12 C 550 12, 250 188, 12 188"
+      d="M 788 12 C 400 12, 200 338, 12 338"
       stroke="#0F2E4A"
       strokeWidth="24"
       fill="none"
       className="opacity-60"
     />
     <path
-      // Start from center of right node, curve to center of left node
-      d="M 788 12 C 550 12, 250 188, 12 188"
+      d="M 788 12 C 400 12, 200 338, 12 338"
       stroke="#FFFFFF"
       strokeWidth="2"
       fill="none"
@@ -176,7 +172,7 @@ export default function SummaryPage() {
   const handleNodeHover = (
     ticket: Ticket,
     index: number,
-    event: React.MouseEvent,
+    event: React.MouseEvent
   ) => {
     const rect = event.currentTarget.getBoundingClientRect();
     setActiveTicket({
@@ -208,72 +204,82 @@ export default function SummaryPage() {
         <div className="flex grow">
           <div className="w-[50%] relative max-w-2xl">
             <div className="m-16 relative">
-              {tickets.map((ticket, index) => (
-                <div
-                  key={index}
-                  className={`relative mb-[6rem] ${
-                    !ticket.approved ? "animate-reject" : ""
-                  }`}
-                  style={{
-                    animation: `fadeIn 0.5s ease-out forwards`,
-                    animationDelay: `${index * 0.2}s`,
-                    opacity: 0,
-                  }}
-                >
-                  {index !== 0 && (
-                    <div
-                      className="absolute -top-36 left-0 right-0 h-72 overflow-visible pointer-events-none"
-                      style={{
-                        animation: `fadeIn 0.8s ease-out forwards`,
-                        animationDelay: `${index * 0.2}s`,
-                        opacity: 0,
-                      }}
-                    >
-                      {index % 2 === 1 ? (
-                        <LeftToRightPath />
-                      ) : (
-                        <RightToLeftPath />
-                      )}
-                    </div>
-                  )}
-
-                  <div
-                    className={`flex items-center ${
-                      index % 2 === 0 ? "flex-row" : "flex-row-reverse"
-                    }`}
-                  >
-                    <div className="block group w-24">
+              {/* Render all paths first */}
+              <div className="absolute inset-0 top-0 ">
+                {tickets.map(
+                  (_, index) =>
+                    index !== 0 && (
                       <div
-                        className={`w-24 h-24 bg-amber-50 rounded-full flex items-center justify-center border-4 ${
-                          ticket.approved
-                            ? "border-[#145D98] hover:border-[#145D98]"
-                            : "border-[#FF3C68] hover:border-[#FF3C68]"
-                        } transition-all z-20 shadow-lg hover:shadow-xl transform hover:scale-105`}
-                        onMouseEnter={(e) =>
-                          handleNodeHover(ticket, index, e)
-                        }
-                        onMouseLeave={(e) =>
-                          handleNodeHover(ticket, index, e)
-                        }
+                        key={`path-${index}`}
+                        className="left-0 right-0 h-[12.5rem] overflow-visible pointer-events-none"
+                        style={{
+                          animation: `fadeIn 0.8s ease-out forwards`,
+                          animationDelay: `${index * 0.2}s`,
+                          opacity: 0,
+                          top: `${index * 8}rem`,
+                        }}
                       >
-                        <div className="absolute inset-0 flex items-center justify-center">
-                          <span className="text-amber-200 text-2xl font-bold"></span>
-                        </div>
-                        <MapPin
-                          className={
-                            ticket.approved
-                              ? "text-[#145D98]"
-                              : "text-[#FF3C68]"
-                          }
-                          size={48}
-                        />
+                        {index % 2 === 1 ? (
+                          <LeftToRightPath />
+                        ) : (
+                          <RightToLeftPath />
+                        )}
                       </div>
-                    </div>
+                    )
+                )}
+              </div>
 
-                    <div className="flex-1 min-w-[200px] max-w-[400px]" />
+              {/* Render all nodes on top */}
+              <div className="relative z-10 pt-8">
+                {tickets.map((ticket, index) => (
+                  <div
+                    key={`node-${index}`}
+                    className={`relative mb-[6.5rem] ${
+                      !ticket.approved ? "animate-reject" : ""
+                    }`}
+                    style={{
+                      animation: `fadeIn 0.5s ease-out forwards`,
+                      animationDelay: `${index * 0.2}s`,
+                      opacity: 0,
+                    }}
+                  >
+                    <div
+                      className={`flex items-center ${
+                        index % 2 === 0 ? "flex-row" : "flex-row-reverse"
+                      }`}
+                    >
+                      <div className="block group w-24">
+                        <div
+                          className={`w-24 h-24 bg-amber-50 rounded-full flex items-center justify-center border-4 ${
+                            ticket.approved
+                              ? "border-[#145D98] hover:border-[#145D98]"
+                              : "border-[#FF3C68] hover:border-[#FF3C68]"
+                          } transition-all shadow-lg hover:shadow-xl transform hover:scale-105`}
+                          onMouseEnter={(e) =>
+                            handleNodeHover(ticket, index, e)
+                          }
+                          onMouseLeave={(e) =>
+                            handleNodeHover(ticket, index, e)
+                          }
+                        >
+                          <div className="absolute inset-0 flex items-center justify-center">
+                            <span className="text-amber-200 text-2xl font-bold"></span>
+                          </div>
+                          <MapPin
+                            className={
+                              ticket.approved
+                                ? "text-[#145D98]"
+                                : "text-[#FF3C68]"
+                            }
+                            size={48}
+                          />
+                        </div>
+                      </div>
+                      <div className="flex-1 min-w-[200px] max-w-[400px]" />
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
           <div className="w-[50%] mr-16 relative overflow-hidden flex flex-col items-center gap-8">
@@ -294,7 +300,6 @@ export default function SummaryPage() {
                   handleDateChange={handleDateChange}
                   step={activeTicket.index + 1}
                   totalSteps={tickets.length}
-                  editExport={() => {activeTicket.ticket.approved = !activeTicket.ticket.approved; handleSave(activeTicket.ticket);}}
                 />
               )}
             </div>
