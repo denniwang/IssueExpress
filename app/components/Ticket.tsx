@@ -18,7 +18,7 @@ interface TicketProps {
   ) => void;
   getRandomFutureDate?: () => string;
   isSummary?: boolean;
-  editExport?: (currentStatus: boolean) => void;
+  editExport?: (ticket: Ticket) => void;
 }
 
 const Ticket: React.FC<TicketProps> = ({
@@ -31,8 +31,8 @@ const Ticket: React.FC<TicketProps> = ({
   handleDateChange,
   getRandomFutureDate,
   isSummary = false,
-  editExport = (currentStatus: boolean) => {
-    ticket.approved = !currentStatus;
+  editExport = (ticket: Ticket) => {
+    ticket.approved = !ticket.approved;
   },
 }) => {
   const [randomEndDate, setRandomEndDate] = useState<string>("");
@@ -76,7 +76,10 @@ const Ticket: React.FC<TicketProps> = ({
           {isSummary && (
             <button
               className="text-xs text-[#0F2E4A] hover:text-[#FF3C68] font-bold"
-              onClick={() => editExport(ticket.approved ?? false)}
+              onClick={() => {
+                editExport(ticket);
+                setRandomEndDate((prev) => prev + " "); // Trigger re-render
+              }}
             >
               {ticket.approved ? (
                 <FaCircleMinus className="inline mr-1 my-auto" />
