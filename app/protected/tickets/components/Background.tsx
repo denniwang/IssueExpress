@@ -12,7 +12,6 @@ export default function Background({ carAnimationClass }: BackgroundProps) {
   const [cactusHeights, setCactusHeight] = useState<string[]>([]);
 
   useEffect(() => {
-    const height = Math.floor(Math.random() * 50) + "px";
     setCactusHeight(
       Array.from({ length: 5 }, () => Math.floor(Math.random() * 100) + "px")
     );
