@@ -14,7 +14,7 @@ import { handleSubmit } from "@/app/actions";
 
 // Update the SVG path components with precise node connections
 const LeftToRightPath = () => (
-  <svg className="absolute w-full h-48 " viewBox="0 0 800 200">
+  <svg className="absolute w-full h-48 -z-10" viewBox="0 0 800 200">
     <path
       // Start from center of left node (x: node radius), curve to center of right node
       d="M 12 12 C 250 12, 550 188, 788 188"
@@ -75,6 +75,13 @@ const styles = `
 export default function SummaryPage() {
   const [approvedTickets, setApprovedTickets] = useState<Ticket[]>([]);
   const [rejectedTickets, setRejectedTickets] = useState<Ticket[]>([]);
+  const [activeTicket, setActiveTicket] = useState<{
+    ticket: Ticket;
+    index: number;
+    position: "left" | "right";
+    rect: DOMRect;
+    isClicked?: boolean;
+  } | null>(null);
 
   useEffect(() => {
     // Retrieve the tickets from localStorage
@@ -114,13 +121,141 @@ export default function SummaryPage() {
     localStorage.setItem("tickets", JSON.stringify(updatedTickets));
   };
 
+  const handleRemove = (ticketToRemove: Ticket) => {
+    const updatedTicket = { ...ticketToRemove, approved: false };
+    setApprovedTickets((prev) =>
+      prev.filter((t) => t.name !== ticketToRemove.name)
+    );
+    setRejectedTickets((prev) => [...prev, updatedTicket]);
+
+    const allTickets = JSON.parse(localStorage.getItem("tickets") || "[]");
+    const updatedTickets = allTickets.map((t: Ticket) =>
+      t.name === ticketToRemove.name ? updatedTicket : t
+    );
+    setActiveTicket(null);
+    localStorage.setItem("tickets", JSON.stringify(updatedTickets));
+  };
+
+  const handleSave = (index: number, updatedTicket: Ticket) => {
+    const updatedTickets = [...approvedTickets];
+    updatedTickets[index] = updatedTicket;
+    setApprovedTickets(updatedTickets);
+
+    const allTickets = JSON.parse(localStorage.getItem("tickets") || "[]");
+    const updatedAllTickets = allTickets.map((t: Ticket) =>
+      t.name === updatedTicket.name ? updatedTicket : t
+    );
+    localStorage.setItem("tickets", JSON.stringify(updatedAllTickets));
+  };
+
+  const PopupCard = () => {
+    if (!activeTicket) return null;
+    const { ticket, index, position, rect } = activeTicket;
+
+    return (
+      <div
+        className="fixed z-50"
+        style={{
+          top: rect.top + rect.height / 2,
+          left: position === "left" ? rect.left - 340 : rect.right + 20,
+          transform: "translateY(-50%)",
+        }}
+      >
+        <div className="w-80 bg-white/95 p-6 rounded-lg shadow-xl">
+          <div className="flex justify-between items-center mb-2">
+            <span className="text-sm text-gray-500">
+              {index + 1} of {approvedTickets.length}
+            </span>
+            <span className="px-2 py-1 bg-green-100 text-green-800 text-sm rounded">
+              Accepted
+            </span>
+          </div>
+          <input
+            className="font-semibold text-lg mb-2 w-full"
+            value={ticket.name}
+            onChange={(e) =>
+              handleSave(index, { ...ticket, name: e.target.value })
+            }
+          />
+          <textarea
+            className="text-sm text-gray-600 mb-3 w-full"
+            value={ticket.description}
+            onChange={(e) =>
+              handleSave(index, { ...ticket, description: e.target.value })
+            }
+          />
+          {ticket.label && (
+            <div className="flex items-center gap-2">
+              <span className="px-2 py-1 bg-amber-100 text-brown-700 text-sm rounded-full">
+                {ticket.label}
+              </span>
+            </div>
+          )}
+          <button
+            onClick={() => handleRemove(ticket)}
+            className="mt-4 w-full bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-500 transition-colors"
+          >
+            Remove
+          </button>
+        </div>
+      </div>
+    );
+  };
+
+  const handleNodeHover = (
+    ticket: Ticket,
+    index: number,
+    event: React.MouseEvent,
+    isEntering: boolean
+  ) => {
+    if (!isEntering) {
+      if (!activeTicket?.isClicked) {
+        setActiveTicket(null);
+      }
+      return;
+    }
+
+    if (activeTicket?.isClicked) return;
+
+    const rect = event.currentTarget.getBoundingClientRect();
+    setActiveTicket({
+      ticket,
+      index,
+      position: index % 2 === 0 ? "right" : "left",
+      rect,
+    });
+  };
+
+  const handleNodeClick = (
+    ticket: Ticket,
+    index: number,
+    event: React.MouseEvent
+  ) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+
+    if (activeTicket?.isClicked && activeTicket.index === index) {
+      setActiveTicket(null);
+    } else {
+      setActiveTicket({
+        ticket,
+        index,
+        position: index % 2 === 0 ? "right" : "left",
+        rect,
+        isClicked: true,
+      });
+    }
+  };
+
   return (
     <>
       <style jsx global>
         {styles}
       </style>
       <div className="flex h-screen bg-[url('/desert-bg.jpg')] bg-cover bg-center">
-        <div className="flex-1 p-8 overflow-y-auto bg-amber-50/80 backdrop-blur-sm">
+        <div
+          className="flex-1 p-8 overflow-y-auto bg-amber-50/80 backdrop-blur-sm"
+          onClick={() => setActiveTicket(null)}
+        >
           <h1 className="text-5xl font-bold mb-16 text-center text-brown-800 font-western drop-shadow-lg">
             TRANSCRIPT OVERVIEW
           </h1>
@@ -141,7 +276,7 @@ export default function SummaryPage() {
                   {/* Path connecting nodes */}
                   {index !== 0 && (
                     <div
-                      className="absolute -top-36 left-0 right-0 h-72 overflow-visible" // Adjusted height and positioning
+                      className="absolute -top-36 left-0 right-0 h-72 overflow-visible"
                       style={{
                         animation: `fadeIn 0.8s ease-out forwards`,
                         animationDelay: `${index * 0.2}s`,
@@ -163,38 +298,23 @@ export default function SummaryPage() {
                     }`}
                   >
                     <div className="relative group w-24">
-                      <div className="w-24 h-24 bg-amber-50 rounded-full flex items-center justify-center border-4 border-amber-200 hover:border-amber-400 transition-all cursor-pointer z-20 shadow-lg hover:shadow-xl transform hover:scale-105">
+                      <div
+                        className="w-24 h-24 bg-amber-50 rounded-full flex items-center justify-center border-4 border-amber-200 hover:border-amber-400 transition-all cursor-pointer z-20 shadow-lg hover:shadow-xl transform hover:scale-105"
+                        onClick={(e) => {
+                          handleNodeClick(ticket, index, e);
+                          e.stopPropagation();
+                        }}
+                        onMouseEnter={(e) =>
+                          handleNodeHover(ticket, index, e, true)
+                        }
+                        onMouseLeave={(e) =>
+                          handleNodeHover(ticket, index, e, false)
+                        }
+                      >
                         <div className="absolute inset-0 flex items-center justify-center">
                           <span className="text-amber-200 text-2xl font-bold"></span>
                         </div>
                         <MapPin className="text-amber-200" size={48} />
-                      </div>
-
-                      {/* Ticket Info Card - show on hover */}
-                      <div className="absolute top-0 left-1/2 transform -translate-x-1/2 mt-32 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-30">
-                        <div className="w-80 bg-white/95 p-6 rounded-lg shadow-xl">
-                          <div className="flex justify-between items-center mb-2">
-                            <span className="text-sm text-gray-500">
-                              {index + 1} of {approvedTickets.length}
-                            </span>
-                            <span className="px-2 py-1 bg-green-100 text-green-800 text-sm rounded">
-                              Accepted
-                            </span>
-                          </div>
-                          <h3 className="font-semibold text-lg mb-2">
-                            {ticket.name}
-                          </h3>
-                          <p className="text-sm text-gray-600 mb-3">
-                            {ticket.description}
-                          </p>
-                          {ticket.label && (
-                            <div className="flex items-center gap-2">
-                              <span className="px-2 py-1 bg-amber-100 text-brown-700 text-sm rounded-full">
-                                {ticket.label}
-                              </span>
-                            </div>
-                          )}
-                        </div>
                       </div>
                     </div>
 
@@ -221,19 +341,19 @@ export default function SummaryPage() {
         </div>
 
         {/* Rejected Tickets Sidebar */}
-        <div className="w-80 bg-brown-800 p-4 overflow-y-auto">
-          <h2 className="text-xl font-western text-amber-200 mb-4">
+        <div className="w-80 bg-yellow-800 p-6 overflow-y-auto shadow-lg">
+          <h2 className="text-2xl font-western text-amber-200 mb-6 border-b border-amber-400 pb-2">
             Rejected Saloons
           </h2>
           <div className="space-y-4">
             {rejectedTickets.map((ticket, index) => (
               <div
                 key={index}
-                className="bg-brown-700 rounded-lg p-3 text-amber-100"
+                className="bg-brown-700 rounded-lg p-4 text-amber-100 shadow-md hover:shadow-lg transition-shadow"
               >
-                <h3 className="font-semibold">{ticket.name}</h3>
+                <h3 className="font-semibold text-lg">{ticket.name}</h3>
                 <p className="text-sm text-amber-200 mt-1">{ticket.label}</p>
-                <div className="flex justify-end gap-2 mt-2">
+                <div className="flex justify-end gap-2 mt-3">
                   <button
                     onClick={() => handleRestore(ticket)}
                     className="p-1 hover:text-green-400 transition-colors"
@@ -254,6 +374,7 @@ export default function SummaryPage() {
           </div>
         </div>
       </div>
+      <PopupCard />
     </>
   );
 }
