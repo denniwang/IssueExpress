@@ -294,6 +294,7 @@ export default function SummaryPage() {
                   handleDateChange={handleDateChange}
                   step={activeTicket.index + 1}
                   totalSteps={tickets.length}
+                  editExport={() => {activeTicket.ticket.approved = !activeTicket.ticket.approved; handleSave(activeTicket.ticket);}}
                 />
               )}
             </div>

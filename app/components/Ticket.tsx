@@ -78,7 +78,6 @@ const Ticket: React.FC<TicketProps> = ({
               className="text-xs text-[#0F2E4A] hover:text-[#FF3C68] font-bold"
               onClick={() => {
                 editExport(ticket);
-                setRandomEndDate((prev) => prev + " "); // Trigger re-render
               }}
             >
               {ticket.approved ? (
