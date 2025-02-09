@@ -39,7 +39,7 @@ const Ticket: React.FC<TicketProps> = ({
   }, [ticket.name]);
 
   return (
-    <div className="flex bg-white shadow-lg rounded-2xl w-full max-w-3xl z-50 fixed font-retro">
+    <div className="flex bg-white rounded-2xl w-full max-w-3xl z-50 fixed font-retro">
       {/* Sidebar */}
       <div className="bg-[#0F2E4A] text-white flex flex-col items-center justify-center px-3 py-6 rounded-l-2xl">
         <span className="text-md font-bold tracking-widest">
@@ -94,9 +94,9 @@ const Ticket: React.FC<TicketProps> = ({
 
       <div className="relative">
         {/* TODO change color of semi circles to match background to give ticket appearance */}
-        <div className="absolute top-0 left-1/2 transform -translate-x-1/2 bg-gray-300 w-10 h-5 rounded-b-full"></div>
+        <div className="absolute top-0 left-1/2 transform -translate-x-1/2 bg-[#87ceeb] w-10 h-5 rounded-b-full"></div>
         <div className="border-l-2 border-dashed border-black h-full mx-6"></div>
-        <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 bg-gray-300 w-10 h-5 rounded-t-full"></div>
+        <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 bg-[#ffd700] w-10 h-5 rounded-t-full"></div>
       </div>
 
       <div className="bg-white p-6 rounded-r-2xl">

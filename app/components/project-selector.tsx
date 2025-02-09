@@ -102,9 +102,9 @@ export default function ProjectSelector({ repos }: { repos: Project[] }) {
               </div>
             </>
           )}
-          {visibleProjects.map((project) => (
-            <div className="w-[350px] h-[300px]">
-                <div
+          {visibleProjects.map((project, index) => (
+            <div className="w-[350px] h-[300px]" key={index}>
+              <div
                 key={project.id}
                 className={`shield-container w-[240px] h-[240px] flex-shrink-0 transition-transform duration-300 ${selectedProject === project ? "w-[300px] h-[300px]" : ""} cursor-pointer flex items-center justify-center`}
                 style={{
@@ -114,10 +114,14 @@ export default function ProjectSelector({ repos }: { repos: Project[] }) {
                   backgroundPosition: "center",
                 }}
                 onClick={() => handleSelectProject(project)}
-                >
+              >
                 <div className="shield relative w-full h-full flex flex-col items-center justify-center text-center ">
-                  <div className={`absolute ${selectedProject === project ? 'top-7' : 'top-5'} left-0 right-0 py-3 shield-header`}>
-                    <span className={`font-retro text-[#FF3C68] ${selectedProject === project ? 'text-lg' : 'text-sm'} tracking-wider`}>
+                  <div
+                    className={`absolute ${selectedProject === project ? "top-7" : "top-5"} left-0 right-0 py-3 shield-header`}
+                  >
+                    <span
+                      className={`font-retro text-[#FF3C68] ${selectedProject === project ? "text-lg" : "text-sm"} tracking-wider`}
+                    >
                       HACKBEANPOT
                     </span>
                   </div>
