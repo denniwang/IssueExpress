@@ -93,34 +93,36 @@ export default function ProjectSelector({ repos }: { repos: Project[] }) {
         <div className="flex gap-16 overflow-hidden">
           {visibleProjects.length === 0 && (
             <>
-            <div>
-              <h1 className="text-white text-3xl">You have no visible projects at this time.</h1>
-            </div>
+              <div>
+                <h1 className="text-white text-3xl">
+                  You have no visible projects at this time.
+                </h1>
+              </div>
             </>
           )}
           {visibleProjects.map((project) => (
-            <div
-              key={project.id}
-              className={`shield-container w-[240px] h-[240px] flex-shrink-0 transition-transform duration-300 hover:scale-105 cursor-pointer`}
-              style={{
-                backgroundImage: "url('/Shield.png')",
-                backgroundSize: "contain",
-                backgroundRepeat: "no-repeat",
-                backgroundPosition: "center",
-                backdropFilter:
-                  selectedProject === project
-                    ? "brightness(150%)"
-                    : "brightness(100%)",
-              }}
-              onClick={() => handleSelectProject(project)}
-            >
-              <div className="shield relative w-full h-full flex flex-col items-center justify-center text-center">
-                <div className="absolute top-5 left-0 right-0 py-3 shield-header">
-                  <span className="font-retro text-white text-sm tracking-wider"></span>
+            <div className="w-[350px] h-[300px]">
+                <div
+                key={project.id}
+                className={`shield-container w-[240px] h-[240px] flex-shrink-0 transition-transform duration-300 ${selectedProject === project ? "w-[300px] h-[300px]" : ""} cursor-pointer flex items-center justify-center`}
+                style={{
+                  backgroundImage: "url('/shield.png')",
+                  backgroundSize: "contain",
+                  backgroundRepeat: "no-repeat",
+                  backgroundPosition: "center",
+                }}
+                onClick={() => handleSelectProject(project)}
+                >
+                <div className="shield relative w-full h-full flex flex-col items-center justify-center text-center ">
+                  <div className={`absolute ${selectedProject === project ? 'top-7' : 'top-5'} left-0 right-0 py-3 shield-header`}>
+                    <span className={`font-retro text-[#FF3C68] ${selectedProject === project ? 'text-lg' : 'text-sm'} tracking-wider`}>
+                      HACKBEANPOT
+                    </span>
+                  </div>
+                  <span className="font-retro text-white text-xl mt-8 whitespace-pre-line leading-relaxed">
+                    {project.name}
+                  </span>
                 </div>
-                <span className="font-retro text-white text-xl mt-8 whitespace-pre-line leading-relaxed">
-                  {project.name}
-                </span>
               </div>
             </div>
           ))}
