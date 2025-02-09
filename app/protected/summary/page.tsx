@@ -82,34 +82,6 @@ export default function SummaryPage() {
     setTickets(storedTickets);
   }, []);
 
-  const handleRestore = (ticketToRestore: Ticket) => {
-    const updatedTicket = { ...ticketToRestore, approved: true };
-    setTickets((prev) =>
-      prev.filter((t) => t.name !== ticketToRestore.name)
-    );
-    setTickets((prev) => [...prev, updatedTicket]);
-
-    const allTickets = JSON.parse(localStorage.getItem("tickets") || "[]");
-    const updatedTickets = allTickets.map((t: Ticket) =>
-      t.name === ticketToRestore.name ? updatedTicket : t
-    );
-    localStorage.setItem("tickets", JSON.stringify(updatedTickets));
-  };
-
-  const handleRemove = (ticketToRemove: Ticket) => {
-    const updatedTicket = { ...ticketToRemove, approved: false };
-    setTickets((prev) =>
-      prev.filter((t) => t.name !== ticketToRemove.name)
-    );
-
-    const allTickets = JSON.parse(localStorage.getItem("tickets") || "[]");
-    const updatedTickets = allTickets.map((t: Ticket) =>
-      t.name === ticketToRemove.name ? updatedTicket : t
-    );
-    setActiveTicket(null);
-    localStorage.setItem("tickets", JSON.stringify(updatedTickets));
-  };
-
   const handleSave = (updatedTicket: Ticket) => {
     // Update the ticket in the array
     const updatedTickets = tickets.map(t => 
@@ -231,7 +203,6 @@ export default function SummaryPage() {
 
   // In the render method, filter tickets for display
   const approvedTickets = tickets.filter(t => t.approved);
-  const rejectedTickets = tickets.filter(t => !t.approved);
 
   return (
     <>
