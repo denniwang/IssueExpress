@@ -295,7 +295,6 @@ export default function SummaryPage() {
                 <TicketCard
                   isSummary={true}
                   ticket={activeTicket.ticket}
-                  onRemove={() => handleToggleApproval(activeTicket.ticket)}
                   handleTicketChange={() => handleSave}
                   handleDateChange={handleDateChange}
                   step={activeTicket.index + 1}
