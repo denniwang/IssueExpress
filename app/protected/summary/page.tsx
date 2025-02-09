@@ -14,29 +14,51 @@ import { handleSubmit } from "@/app/actions";
 
 // Update the SVG path components with precise node connections
 const LeftToRightPath = () => (
-  <svg className="absolute w-full h-48 -z-10 pointer-events-none" viewBox="0 0 800 200">
+  <svg
+    className="absolute w-full h-48 -z-10 pointer-events-none"
+    viewBox="0 0 800 200"
+  >
     <path
       // Start from center of left node (x: node radius), curve to center of right node
       d="M 12 12 C 250 12, 550 188, 788 188"
-      stroke="#8B4513"
-      strokeWidth="4"
+      stroke="#0F2E4A"
+      strokeWidth="24"
+      fill="none"
+      className="opacity-60"
+    />
+    <path
+      // Start from center of left node (x: node radius), curve to center of right node
+      d="M 12 12 C 250 12, 550 188, 788 188"
+      stroke="#FFFFFF"
+      strokeWidth="2"
       fill="none"
       strokeDasharray="10,10"
-      className="opacity-60 animate-draw-line"
+      className="opacity-100"
     />
   </svg>
 );
 
 const RightToLeftPath = () => (
-  <svg className="absolute w-full h-48 -z-10 pointer-events-none" viewBox="0 0 800 200">
+  <svg
+    className="absolute w-full h-48 -z-10 pointer-events-none"
+    viewBox="0 0 800 200"
+  >
     <path
       // Start from center of right node, curve to center of left node
       d="M 788 12 C 550 12, 250 188, 12 188"
-      stroke="#8B4513"
-      strokeWidth="4"
+      stroke="#0F2E4A"
+      strokeWidth="24"
+      fill="none"
+      className="opacity-60"
+    />
+    <path
+      // Start from center of right node, curve to center of left node
+      d="M 788 12 C 550 12, 250 188, 12 188"
+      stroke="#FFFFFF"
+      strokeWidth="2"
       fill="none"
       strokeDasharray="10,10"
-      className="opacity-60 animate-draw-line"
+      className="opacity-100"
     />
   </svg>
 );
@@ -63,6 +85,21 @@ const styles = `
     }
   }
 
+  @keyframes rejectNode {
+    0% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    50% {
+      transform: scale(1.2) rotate(10deg);
+      opacity: 0.5;
+    }
+    100% {
+      transform: scale(0.8) rotate(-10deg);
+      opacity: 0;
+    }
+  }
+
   .animate-draw-line {
     animation: drawLine 1.5s ease-out forwards;
   }
@@ -70,11 +107,14 @@ const styles = `
   .animate-fade-in {
     animation: fadeIn 0.5s ease-out forwards;
   }
+
+  .animate-reject {
+    animation: rejectNode 0.5s ease-in-out forwards;
+  }
 `;
 
 export default function SummaryPage() {
-  const [approvedTickets, setApprovedTickets] = useState<Ticket[]>([]);
-  const [rejectedTickets, setRejectedTickets] = useState<Ticket[]>([]);
+  const [tickets, setTickets] = useState<Ticket[]>([]);
   const [activeTicket, setActiveTicket] = useState<{
     ticket: Ticket;
     index: number;
@@ -86,66 +126,30 @@ export default function SummaryPage() {
   useEffect(() => {
     // Retrieve the tickets from localStorage
     const storedTickets = JSON.parse(localStorage.getItem("tickets") || "[]");
-
-    // Filter the tickets based on approval status
-    const approved = storedTickets.filter((t: Ticket) => t.approved);
-    const rejected = storedTickets.filter((t: Ticket) => !t.approved);
-
-    // Update the state with the filtered tickets
-    setApprovedTickets(approved);
-    setRejectedTickets(rejected);
+    setTickets(storedTickets);
   }, []);
 
-  const handleDelete = (ticketToDelete: Ticket) => {
-    setRejectedTickets((prev) =>
-      prev.filter((t) => t.name !== ticketToDelete.name)
-    );
-    const allTickets = JSON.parse(localStorage.getItem("tickets") || "[]");
-    const updatedTickets = allTickets.filter(
-      (t: Ticket) => t.name !== ticketToDelete.name
-    );
-    localStorage.setItem("tickets", JSON.stringify(updatedTickets));
-  };
-
-  const handleRestore = (ticketToRestore: Ticket) => {
-    const updatedTicket = { ...ticketToRestore, approved: true };
-    setRejectedTickets((prev) =>
-      prev.filter((t) => t.name !== ticketToRestore.name)
-    );
-    setApprovedTickets((prev) => [...prev, updatedTicket]);
-
-    const allTickets = JSON.parse(localStorage.getItem("tickets") || "[]");
-    const updatedTickets = allTickets.map((t: Ticket) =>
-      t.name === ticketToRestore.name ? updatedTicket : t
-    );
-    localStorage.setItem("tickets", JSON.stringify(updatedTickets));
-  };
-
-  const handleRemove = (ticketToRemove: Ticket) => {
-    const updatedTicket = { ...ticketToRemove, approved: false };
-    setApprovedTickets((prev) =>
-      prev.filter((t) => t.name !== ticketToRemove.name)
-    );
-    setRejectedTickets((prev) => [...prev, updatedTicket]);
-
-    const allTickets = JSON.parse(localStorage.getItem("tickets") || "[]");
-    const updatedTickets = allTickets.map((t: Ticket) =>
-      t.name === ticketToRemove.name ? updatedTicket : t
-    );
-    setActiveTicket(null);
-    localStorage.setItem("tickets", JSON.stringify(updatedTickets));
-  };
-
-  const handleSave = (index: number, updatedTicket: Ticket) => {
-    const updatedTickets = [...approvedTickets];
-    updatedTickets[index] = updatedTicket;
-    setApprovedTickets(updatedTickets);
-
-    const allTickets = JSON.parse(localStorage.getItem("tickets") || "[]");
-    const updatedAllTickets = allTickets.map((t: Ticket) =>
+  const handleSave = (updatedTicket: Ticket) => {
+    // Update the ticket in the array
+    const updatedTickets = tickets.map(t =>
       t.name === updatedTicket.name ? updatedTicket : t
     );
-    localStorage.setItem("tickets", JSON.stringify(updatedAllTickets));
+
+    setTickets(updatedTickets);
+    localStorage.setItem("tickets", JSON.stringify(updatedTickets));
+
+    // Update the active ticket if it exists
+    if (activeTicket) {
+      setActiveTicket({
+        ...activeTicket,
+        ticket: updatedTicket,
+      });
+    }
+  };
+
+  const handleToggleApproval = (ticketToToggle: Ticket) => {
+    const updatedTicket = { ...ticketToToggle, approved: !ticketToToggle.approved };
+    handleSave(updatedTicket);
   };
 
   const PopupCard = () => {
@@ -164,7 +168,7 @@ export default function SummaryPage() {
         <div className="w-80 bg-white/95 p-6 rounded-lg shadow-xl">
           <div className="flex justify-between items-center mb-2">
             <span className="text-sm text-gray-500">
-              {index + 1} of {approvedTickets.length + rejectedTickets.length}
+              {index + 1} of {tickets.length}
             </span>
             <span
               className={`px-2 py-1 ${
@@ -180,14 +184,14 @@ export default function SummaryPage() {
             className="font-semibold text-lg mb-2 w-full"
             value={ticket.name}
             onChange={(e) =>
-              handleSave(index, { ...ticket, name: e.target.value })
+              handleSave({ ...ticket, name: e.target.value })
             }
           />
           <textarea
             className="text-sm text-gray-600 mb-3 w-full"
             value={ticket.description}
             onChange={(e) =>
-              handleSave(index, { ...ticket, description: e.target.value })
+              handleSave({ ...ticket, description: e.target.value })
             }
           />
           {ticket.label && (
@@ -198,9 +202,7 @@ export default function SummaryPage() {
             </div>
           )}
           <button
-            onClick={() =>
-              ticket.approved ? handleRemove(ticket) : handleRestore(ticket)
-            }
+            onClick={() => handleToggleApproval(ticket)}
             className={`mt-4 w-full ${
               ticket.approved
                 ? "bg-red-600 hover:bg-red-500"
@@ -274,11 +276,12 @@ export default function SummaryPage() {
 
           <div className="relative max-w-4xl mx-auto">
             <div className="relative py-8">
-              {/* Combine approved and rejected tickets */}
-              {[...approvedTickets, ...rejectedTickets].map((ticket, index) => (
+              {tickets.map((ticket, index) => (
                 <div
                   key={index}
-                  className="relative mb-[6rem]"
+                  className={`relative mb-[6rem] ${
+                    !ticket.approved ? "animate-reject" : ""
+                  }`}
                   style={{
                     animation: `fadeIn 0.5s ease-out forwards`,
                     animationDelay: `${index * 0.2}s`,
@@ -311,8 +314,8 @@ export default function SummaryPage() {
                       <div
                         className={`w-24 h-24 bg-amber-50 rounded-full flex items-center justify-center border-4 ${
                           ticket.approved
-                            ? "border-amber-200 hover:border-amber-400"
-                            : "border-red-400 hover:border-red-500"
+                            ? "border-[#145D98] hover:border-[#145D98]"
+                            : "border-[#FF3C68] hover:border-[#FF3C68]"
                         } transition-all cursor-pointer z-20 shadow-lg hover:shadow-xl transform hover:scale-105`}
                         onClick={(e) => {
                           handleNodeClick(ticket, index, e);
@@ -330,7 +333,7 @@ export default function SummaryPage() {
                         </div>
                         <MapPin
                           className={
-                            ticket.approved ? "text-amber-200" : "text-red-400"
+                            ticket.approved ? "text-[#145D98]" : "text-[#FF3C68]"
                           }
                           size={48}
                         />
@@ -351,6 +354,7 @@ export default function SummaryPage() {
                 const selectedProject = JSON.parse(
                   localStorage.getItem("selectedProject") || "{}"
                 );
+                const approvedTickets = tickets.filter(t => t.approved);
                 handleSubmit(approvedTickets, selectedProject);
               }}
               className="px-6 py-2 bg-brown-600 text-amber-200 rounded-lg hover:bg-brown-700 transition-colors font-western text-lg shadow-md hover:shadow-lg"
