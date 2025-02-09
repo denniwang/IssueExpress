@@ -1,7 +1,6 @@
 "use server";
 
 import { createClient } from "@/utils/supabase/server";
-import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import Ticket from "./components/Ticket";
 import { Project } from "./components/project-selector";
@@ -38,7 +37,7 @@ export const handleSubmit = async (
   if (!user) {
     return redirect("/sign-in");
   }
-  const { data, error } = await supabase.auth.getSession();
+  const { data } = await supabase.auth.getSession();
   const accessToken = data.session?.provider_token;
 
   approvedTickets.forEach(async (ticket) => {
