@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Micro+5&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -29,6 +31,7 @@
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
+    --font-micro5: 'Micro 5', sans-serif;
   }
 
   .dark {
@@ -61,7 +64,7 @@
 
 @layer base {
   * {
-    @apply border-border;
+    font-family: var(--font-micro5);
   }
   body {
     @apply bg-background text-foreground;
