@@ -11,13 +11,13 @@ export default function HangingHeader({
 }: HangingHeaderProps) {
   return (
     <>
-      <div className="absolute left-1/4 -translate-x-1/4 flex justify-center w-full">
-        <div className={`w-[3px] h-16 ${ropeColor} mx-32 relative`}>
+      <div className="absolute left-1/4 -translate-x-1/4 flex justify-between w-[80%] ml-11">
+        <div className={`w-[3px] h-16 ${ropeColor} relative`}>
           <div
             className={`w-4 h-4 ${circleColor} rounded-full absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2`}
           />
         </div>
-        <div className={`w-[3px] h-16 ${ropeColor} mx-32 relative`}>
+        <div className={`w-[3px] h-16 ${ropeColor} relative`}>
           <div
             className={`w-4 h-4 ${circleColor} rounded-full absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2`}
           />

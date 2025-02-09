@@ -177,7 +177,6 @@ export default function SummaryPage() {
     ticket: Ticket,
     index: number,
     event: React.MouseEvent,
-    isEntering: boolean
   ) => {
     const rect = event.currentTarget.getBoundingClientRect();
     setActiveTicket({
@@ -205,8 +204,8 @@ export default function SummaryPage() {
       <style jsx global>
         {styles}
       </style>
-      <div className="h-full bg-[#F7E3E1]">
-        <div className="flex grow" onClick={() => setActiveTicket(null)}>
+      <div className="h-screen bg-[#F7E3E1]">
+        <div className="flex grow">
           <div className="w-[50%] relative max-w-2xl">
             <div className="m-16 relative">
               {tickets.map((ticket, index) => (
@@ -251,10 +250,10 @@ export default function SummaryPage() {
                             : "border-[#FF3C68] hover:border-[#FF3C68]"
                         } transition-all z-20 shadow-lg hover:shadow-xl transform hover:scale-105`}
                         onMouseEnter={(e) =>
-                          handleNodeHover(ticket, index, e, true)
+                          handleNodeHover(ticket, index, e)
                         }
                         onMouseLeave={(e) =>
-                          handleNodeHover(ticket, index, e, false)
+                          handleNodeHover(ticket, index, e)
                         }
                       >
                         <div className="absolute inset-0 flex items-center justify-center">
@@ -282,7 +281,7 @@ export default function SummaryPage() {
               <HangingHeader
                 title="TRANSCRIPT OVERVIEW         "
                 ropeColor="bg-white"
-                circleColor="#0F2E4A"
+                circleColor="bg-[#0F2E4A]"
               />
             </div>
             <div className="w-full h-full overflow-auto mt-48 flex justify-center">
