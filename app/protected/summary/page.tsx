@@ -204,7 +204,7 @@ export default function SummaryPage() {
       <style jsx global>
         {styles}
       </style>
-      <div className="h-screen bg-[#F7E3E1]">
+      <div className="h-full bg-[#F7E3E1]">
         <div className="flex grow">
           <div className="w-[50%] relative max-w-2xl">
             <div className="m-16 relative">
