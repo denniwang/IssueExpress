@@ -9,7 +9,7 @@ export default async function Login() {
       style={{ backgroundImage: "url('/login-background.png')" }}
     >
       <div className="flex flex-col justify-between text-lg" style={{ height: "85%"}}>
-        <h1 className="mt-11 text-white text-6xl">Project Name</h1>
+        <h1 className="mt-11 text-white text-9xl">IssueExpress</h1>
         <form className="flex flex-row justify-center">
           <SubmitButton pendingText="Signing In..." formAction={signInAction}>
             Sign in to GitHub
