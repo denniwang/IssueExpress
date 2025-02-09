@@ -1,4 +1,7 @@
 # Transcript Overview Application
+
+![Sign In](https://github.com/user-attachments/assets/8f683c88-5d60-414c-805e-6fbbeb191995)
+
 ## Overview
 The Transcript Overview Application is a dynamic web application designed to manage and visualize project tickets. It provides an interactive interface for users to view, edit, and organize tickets into approved and rejected categories. The application features a visually appealing node-based layout with popups for detailed ticket information.
 

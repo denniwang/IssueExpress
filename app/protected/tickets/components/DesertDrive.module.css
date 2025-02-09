@@ -257,7 +257,7 @@
 }
 
 .slideOutAndBack {
-  animation: slideOutAndBack 2s ease-in-out forwards;
+  animation: slideOutAndBack 1.5s ease-in-out forwards;
 }
 
 @keyframes slideOut {
@@ -273,4 +273,19 @@
 
 .slideOut {
   animation: slideOut 1s ease-in-out forwards;
+}
+
+@keyframes slideRight {
+  0% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100vw);
+    opacity: 0;
+  }
+}
+
+.slideRight {
+  animation: slideRight 3s ease-in-out forwards;
 }
