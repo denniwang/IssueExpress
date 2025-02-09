@@ -286,7 +286,7 @@ export default function SummaryPage() {
             <div className="fixed w-full max-w-4xl ml-2">
               <HangingHeader
                 title="TRANSCRIPT OVERVIEW         "
-                ropeColor="bg-white"
+                ropeColor="bg-[#10283F]"
                 circleColor="bg-[#0F2E4A]"
               />
             </div>
@@ -300,6 +300,7 @@ export default function SummaryPage() {
                   handleDateChange={handleDateChange}
                   step={activeTicket.index + 1}
                   totalSteps={tickets.length}
+                  editExport={() => {handleToggleApproval(activeTicket.ticket)}}
                 />
               )}
             </div>

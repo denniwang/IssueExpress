@@ -8,7 +8,7 @@ interface TicketProps {
   totalSteps: number;
   ticket: Ticket;
   onAccept?: () => void;
-  onRemove: () => void;
+  onRemove?: () => void;
   handleTicketChange: (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => void;
@@ -67,7 +67,6 @@ const Ticket: React.FC<TicketProps> = ({
             {isSummary && (
               <button
                 className={`text-xs text-white px-3 py-1 font-bold ${ticket.approved ? "bg-[#0F2E4A]" : "bg-[#FF3C68]"}`}
-                onClick={onRemove}
               >
                 {ticket.approved ? "APPROVED" : "REMOVED"}
               </button>
