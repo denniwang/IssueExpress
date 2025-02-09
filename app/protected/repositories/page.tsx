@@ -9,7 +9,7 @@ export default async function Home() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const { data, error } = await supabase.auth.getSession();
+  const { data } = await supabase.auth.getSession();
   const accessToken = data.session?.provider_token;
   console.log("Access Token", accessToken);
 
