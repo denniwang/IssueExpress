@@ -16,6 +16,7 @@ const DesertDrive: React.FC = () => {
   const [tickets, setTickets] = useState<Ticket[]>(defaultTickets);
   const [animationClass, setAnimationClass] = useState("");
   const [carAnimationClass, setCarAnimationClass] = useState("");
+  const [showTicket, setShowTicket] = useState(true);
   const router = useRouter();
 
   // Derive currentTicket from currentTicketIndex and tickets
@@ -67,6 +68,7 @@ const DesertDrive: React.FC = () => {
     } else {
       setAnimationClass(styles.slideOut);
       setCarAnimationClass(styles.slideRight)
+      setShowTicket(false);
     }
 
     setTimeout(() => {
@@ -88,7 +90,6 @@ const DesertDrive: React.FC = () => {
 
       // Reset the animation class
       setAnimationClass("");
-      setCurrentTicketIndex(currentTicketIndex + 1);
     }, 1500); // Duration of the slide-out animation
   };
 
@@ -166,7 +167,7 @@ const DesertDrive: React.FC = () => {
       <Background carAnimationClass={carAnimationClass} />
 
       {/* Render current ticket */}
-      {currentTicket && (
+      {currentTicket && showTicket && (
         <div className={`${styles.ticketApprovalContainer} ${animationClass}`}>
           <TicketComponent
             step={currentTicketIndex + 1}
