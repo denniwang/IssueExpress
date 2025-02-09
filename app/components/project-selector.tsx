@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { IoReturnUpBackOutline } from "react-icons/io5";
 import { useRouter } from "next/navigation";
+import HangingHeader from "./HangingHeader";
 
 export interface Project {
   description: string;
@@ -61,18 +62,11 @@ export default function ProjectSelector({ repos }: { repos: Project[] }) {
         />
       </div>
 
-      {/* Header */}
-      <div className="relative">
-        <div className="absolute left-1/2 -translate-x-1/2 flex justify-center w-full">
-          <div className="w-[1px] h-16 bg-white mx-32" />
-          <div className="w-[1px] h-16 bg-white mx-32" />
-        </div>
-        <div className="bg-[#145D98] px-16 py-4 mt-16 shadow-lg drop-shadow-xs">
-          <h1 className="text-3xl font-retro text-white tracking-[0.2em]">
-            SELECT YOUR PROJECT
-          </h1>
-        </div>
-      </div>
+      <HangingHeader
+        title="SELECT YOUR PROJECT"
+        ropeColor="bg-white"
+        circleColor="bg-[#0C3E67]"
+      />
 
       {/* Projects Carousel */}
       <div className="relative w-full max-w-[900px] flex items-center justify-center mt-24 mb-16">

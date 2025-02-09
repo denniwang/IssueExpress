@@ -14,8 +14,8 @@ export default async function Home() {
   console.log("Access Token", accessToken);
 
   const defaultUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : "http://localhost:3000";
+    ? `https://${process.env.VERCEL_URL}`
+    : "http://localhost:3000";
 
   const response = await fetch(`${defaultUrl}/api/getAllRepos`, {
     method: "POST",
