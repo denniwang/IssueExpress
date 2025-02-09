@@ -7,7 +7,7 @@ interface TicketProps {
   step: number;
   totalSteps: number;
   ticket: Ticket;
-  onAccept: () => void;
+  onAccept?: () => void;
   onRemove: () => void;
   handleTicketChange: (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -16,7 +16,7 @@ interface TicketProps {
     event: React.ChangeEvent<HTMLInputElement>,
     field: "startDate" | "endDate"
   ) => void;
-  getRandomFutureDate: () => string;
+  getRandomFutureDate?: () => string;
   isSummary?: boolean;
   editExport?: (currentStatus: boolean) => void;
 }
@@ -31,13 +31,15 @@ const Ticket: React.FC<TicketProps> = ({
   handleDateChange,
   getRandomFutureDate,
   isSummary = false,
-  editExport = (currentStatus: boolean) => { ticket.approved = !currentStatus; },
+  editExport = (currentStatus: boolean) => {
+    ticket.approved = !currentStatus;
+  },
 }) => {
   const [randomEndDate, setRandomEndDate] = useState<string>("");
 
   // Generate random end date once when the component mounts or when ticket.id changes
   useEffect(() => {
-    if (!ticket.endDate) {
+    if (!ticket.endDate && getRandomFutureDate) {
       setRandomEndDate(getRandomFutureDate());
     }
   }, [ticket.name]);
@@ -76,7 +78,11 @@ const Ticket: React.FC<TicketProps> = ({
               className="text-xs text-[#0F2E4A] hover:text-[#FF3C68] font-bold"
               onClick={() => editExport(ticket.approved ?? false)}
             >
-              {ticket.approved ? <FaCircleMinus className="inline mr-1 my-auto" /> : <FaPlus className="inline mr-1 my-auto" />}
+              {ticket.approved ? (
+                <FaCircleMinus className="inline mr-1 my-auto" />
+              ) : (
+                <FaPlus className="inline mr-1 my-auto" />
+              )}
               {ticket.approved ? "REMOVE FROM EXPORT" : "ADD TO EXPORT"}
             </button>
           )}
@@ -122,11 +128,11 @@ const Ticket: React.FC<TicketProps> = ({
 
       <div className="relative">
         <div
-          className={`absolute top-0 left-1/2 transform -translate-x-1/2 ${isSummary ? "bg-amber-50" : "bg-[#87ceeb]"} w-10 h-5 rounded-b-full`}
+          className={`absolute top-0 left-1/2 transform -translate-x-1/2 ${isSummary ? "bg-[#F7E3E1]" : "bg-[#87ceeb]"} w-10 h-5 rounded-b-full`}
         ></div>
         <div className="border-l-2 border-dashed border-black h-full mx-6"></div>
         <div
-          className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 ${isSummary ? "bg-amber-50" : "bg-[#ffd700]"} w-10 h-5 rounded-t-full`}
+          className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 ${isSummary ? "bg-[#F7E3E1]" : "bg-[#ffd700]"} w-10 h-5 rounded-t-full`}
         ></div>
       </div>
 

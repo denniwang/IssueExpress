@@ -2,10 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { Ticket } from "../tickets/types";
+import { default as TicketCard } from "@/app/components/Ticket";
 import { MapPin } from "lucide-react";
 import React from "react";
 import { handleSubmit } from "@/app/actions";
 import { useRouter } from "next/navigation";
+import HangingHeader from "@/app/components/HangingHeader";
 
 // Update the SVG path components with precise node connections
 const LeftToRightPath = () => (
@@ -124,6 +126,24 @@ export default function SummaryPage() {
     // Retrieve the tickets from localStorage
     const storedTickets = JSON.parse(localStorage.getItem("tickets") || "[]");
     setTickets(storedTickets);
+    if (storedTickets.length > 0) {
+      setActiveTicket({
+        ticket: storedTickets[0],
+        index: 0,
+        position: "left",
+        rect: {
+          top: 0,
+          left: 0,
+          width: 0,
+          height: 0,
+          x: 0,
+          y: 0,
+          bottom: 0,
+          right: 0,
+          toJSON: () => "",
+        },
+      });
+    }
   }, []);
 
   const handleSave = (updatedTicket: Ticket) => {
@@ -149,6 +169,7 @@ export default function SummaryPage() {
       ...ticketToToggle,
       approved: !ticketToToggle.approved,
     };
+
     handleSave(updatedTicket);
   };
 
@@ -220,15 +241,6 @@ export default function SummaryPage() {
     event: React.MouseEvent,
     isEntering: boolean
   ) => {
-    if (!isEntering) {
-      if (!activeTicket?.isClicked) {
-        setActiveTicket(null);
-      }
-      return;
-    }
-
-    if (activeTicket?.isClicked) return;
-
     const rect = event.currentTarget.getBoundingClientRect();
     setActiveTicket({
       ticket,
@@ -238,42 +250,27 @@ export default function SummaryPage() {
     });
   };
 
-  const handleNodeClick = (
-    ticket: Ticket,
-    index: number,
-    event: React.MouseEvent
+  console.log("Active Ticket", activeTicket);
+  console.log("Tickets", tickets);
+  const handleDateChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    field: "startDate" | "endDate"
   ) => {
-    const rect = event.currentTarget.getBoundingClientRect();
-
-    if (activeTicket?.isClicked && activeTicket.index === index) {
-      setActiveTicket(null);
-    } else {
-      setActiveTicket({
-        ticket,
-        index,
-        position: index % 2 === 0 ? "right" : "left",
-        rect,
-        isClicked: true,
-      });
-    }
+    const newDate = new Date(e.target.value);
+    const updatedTickets = tickets.map((ticket, index) =>
+      index === activeTicket?.index ? { ...ticket, [field]: newDate } : ticket
+    );
+    setTickets(updatedTickets);
   };
-
   return (
-    <>
+    <div className="h-screen bg-[#F7E3E1]">
       <style jsx global>
         {styles}
       </style>
-      <div className="flex h-screen bg-cover bg-center">
-        <div
-          className="flex-1 p-8 overflow-y-auto bg-[#F7E3E1] backdrop-blur-sm"
-          onClick={() => setActiveTicket(null)}
-        >
-          <h1 className="text-5xl font-bold mb-16 text-center text-brown-800 font-western drop-shadow-lg">
-            TRANSCRIPT OVERVIEW
-          </h1>
-
-          <div className="relative max-w-4xl mx-auto">
-            <div className="relative py-8">
+      <div className="h-full bg-[#F7E3E1]">
+        <div className="flex grow" onClick={() => setActiveTicket(null)}>
+          <div className="w-[50%] relative max-w-2xl">
+            <div className="m-16 relative">
               {tickets.map((ticket, index) => (
                 <div
                   key={index}
@@ -315,10 +312,6 @@ export default function SummaryPage() {
                             ? "border-[#145D98] hover:border-[#145D98]"
                             : "border-[#FF3C68] hover:border-[#FF3C68]"
                         } transition-all cursor-pointer z-20 shadow-lg hover:shadow-xl transform hover:scale-105`}
-                        onClick={(e) => {
-                          handleNodeClick(ticket, index, e);
-                          e.stopPropagation();
-                        }}
                         onMouseEnter={(e) =>
                           handleNodeHover(ticket, index, e, true)
                         }
@@ -346,34 +339,56 @@ export default function SummaryPage() {
               ))}
             </div>
           </div>
+          <div className="w-[50%] mr-16 relative overflow-hidden flex flex-col items-center gap-8">
+            <div className="fixed w-full max-w-4xl ml-2">
+              <HangingHeader
+                title="TRANSCRIPT OVERVIEW         "
+                ropeColor="bg-white"
+                circleColor="#0F2E4A"
+              />
+            </div>
+            <div className="w-full h-full overflow-auto mt-48 flex justify-center">
+              {activeTicket && (
+                <TicketCard
+                  isSummary={true}
+                  ticket={activeTicket.ticket}
+                  onRemove={() => handleToggleApproval(activeTicket.ticket)}
+                  handleTicketChange={() => handleSave}
+                  handleDateChange={handleDateChange}
+                  step={activeTicket.index + 1}
+                  totalSteps={tickets.length}
+                />
+              )}
+            </div>
+            <div className="flex justify-center">
+              <button
+                onClick={async () => {
+                  setIsLoading(true);
+                  const selectedProject = JSON.parse(
+                    localStorage.getItem("selectedProject") || "{}"
+                  );
 
-          {/* Add Submit Button */}
-          <div className="flex justify-center mb-8">
-            <button
-              onClick={async () => {
-                setIsLoading(true);
-                const selectedProject = JSON.parse(
-                  localStorage.getItem("selectedProject") || "{}"
-                );
-                
-                const approvedTickets = tickets.filter(t => t.approved);
-                const result = await handleSubmit(
-                  approvedTickets,
-                  selectedProject
-                );
-                if (result) {
-                  router.push(`/protected/success?githubLink=${result.success.link}`);
-                }
-                setIsLoading(false);
-              }}
-              className="font-retro h-16 px-12 py-2 bg-[#0F2E4A] text-white hover:bg-[#0F2E4A]-700 transition-colors font-western text-lg shadow-md hover:shadow-lg"
-            >
-              {isLoading ? "Submitting..." : "Submit Roadmap"}
-            </button>
+                  const approvedTickets = tickets.filter((t) => t.approved);
+                  const result = await handleSubmit(
+                    approvedTickets,
+                    selectedProject
+                  );
+
+                  if (result) {
+                    router.push(
+                      `/protected/success?githubLink=${result.success.link}`
+                    );
+                    setIsLoading(false);
+                  }
+                }}
+                className="font-retro h-16 px-12 fixed py-2 bg-[#0F2E4A] text-white hover:bg-[#0F2E4A]-700 transition-colors font-western text-lg shadow-md hover:shadow-lg"
+              >
+                {isLoading ? "Submitting..." : "Submit Roadmap"}
+              </button>
+            </div>
           </div>
         </div>
       </div>
-      <PopupCard />
-    </>
+    </div>
   );
 }
