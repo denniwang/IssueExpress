@@ -145,11 +145,11 @@ const DesertDrive: React.FC = () => {
               <TentTree className="w-5 h-5 text-white" />
             </div>
             <div className="flex-1 mx-8 relative h-1">
+              <div className="absolute top-0 left-0 w-full h-full bg-gray-600" />
               <div
                 className="absolute top-0 left-0 h-full bg-gradient-to-r from-blue-400 to-blue-600 transition-all duration-300"
                 style={{ width: `${progress}%` }}
               />
-              <div className="absolute top-0 left-0 w-full h-full bg-gray-600" />
               <div
                 className="absolute top-1/2 -translate-y-1/2 z-10 transition-all duration-300"
                 style={{ left: `${progress}%` }}
