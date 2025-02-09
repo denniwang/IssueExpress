@@ -1,5 +1,6 @@
 import { FaEdit } from "react-icons/fa";
 import type { Ticket } from "../protected/tickets/types";
+import { useState, useEffect } from "react";
 
 interface TicketProps {
   step: number;
@@ -27,6 +28,16 @@ const Ticket: React.FC<TicketProps> = ({
   handleDateChange,
   getRandomFutureDate,
 }) => {
+
+  const [randomEndDate, setRandomEndDate] = useState<string>('');
+
+  // Generate random end date once when the component mounts or when ticket.id changes
+  useEffect(() => {
+    if (!ticket.endDate) {
+      setRandomEndDate(getRandomFutureDate());
+    }
+  }, [ticket.name]);
+
   return (
     <div className="flex bg-white shadow-lg rounded-2xl w-full max-w-3xl z-50 fixed font-retro">
       {/* Sidebar */}
@@ -142,9 +153,7 @@ const Ticket: React.FC<TicketProps> = ({
           type="datetime"
           className="text-black px-3 py-1 rounded-md font-bold border-none focus:outline-none"
           value={
-            ticket.endDate
-              ? ticket.endDate.toISOString().split("T")[0]
-              : getRandomFutureDate()
+            randomEndDate
           }
           onChange={(event) => handleDateChange(event, "endDate")}
           name="endDate"
