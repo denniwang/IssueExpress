@@ -6,7 +6,6 @@ import { useState, useEffect } from "react";
 import { tickets as defaultTickets, Ticket } from "../types";
 import { TentTree, Car, MapPin } from "lucide-react";
 import { useRouter } from "next/navigation";
-import Background from "./Background";
 import TicketComponent from "@/app/components/Ticket";
 
 const DesertDrive: React.FC = () => {
@@ -164,9 +163,9 @@ const DesertDrive: React.FC = () => {
           </div>
         </div>
       </div>
+      <div className={styles.bg}>
 
-      <Background carAnimationClass={carAnimationClass} />
-
+      </div>
       {/* Render current ticket */}
       {currentTicket && showTicket && (
         <div className={`${styles.ticketApprovalContainer} ${animationClass}`}>

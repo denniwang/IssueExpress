@@ -122,11 +122,11 @@ const Ticket: React.FC<TicketProps> = ({
 
       <div className="relative">
         <div
-          className={`absolute top-0 left-1/2 transform -translate-x-1/2 ${isSummary ? "bg-amber-50" : "bg-[#87ceeb]"} w-10 h-5 rounded-b-full`}
+          className={`absolute top-0 left-1/2 transform -translate-x-1/2 ${isSummary ? "bg-amber-50" : "bg-[#FFEFED]"} w-10 h-5 rounded-b-full`}
         ></div>
         <div className="border-l-2 border-dashed border-black h-full mx-6"></div>
         <div
-          className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 ${isSummary ? "bg-amber-50" : "bg-[#ffd700]"} w-10 h-5 rounded-t-full`}
+          className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 ${isSummary ? "bg-amber-50" : "bg-[#FFEFED]"} w-10 h-5 rounded-t-full`}
         ></div>
       </div>
 
