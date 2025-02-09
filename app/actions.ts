@@ -8,10 +8,14 @@ import { Project } from "./components/project-selector";
 async function signInWithGithub() {
   const supabase = await createClient();
 
+  const defaultUrl = process.env.VERCEL_URL
+  ? `https://${process.env.VERCEL_URL}`
+  : "http://localhost:3000";
+
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "github",
     options: {
-      redirectTo: `http://localhost:3000/auth/callback`,
+      redirectTo: `${defaultUrl}/auth/callback`,
       scopes: "repo project",
     },
   });
