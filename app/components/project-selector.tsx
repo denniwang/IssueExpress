@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { IoReturnUpBackOutline } from "react-icons/io5";
 import { useRouter } from "next/navigation";
 
-interface Project {
+export interface Project {
   description: string;
   id: string;
   isPrivate: boolean;

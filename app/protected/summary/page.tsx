@@ -10,6 +10,7 @@ import {
   ChevronDown,
 } from "lucide-react";
 import React from "react";
+import { handleSubmit } from "@/app/actions";
 
 // Update the SVG path components with precise node connections
 const LeftToRightPath = () => (
@@ -202,6 +203,20 @@ export default function SummaryPage() {
                 </div>
               ))}
             </div>
+          </div>
+          {/* Add Submit Button */}
+          <div className="flex justify-center mb-8">
+            <button
+              onClick={() => {
+                const selectedProject = JSON.parse(
+                  localStorage.getItem("selectedProject") || "{}"
+                );
+                handleSubmit(approvedTickets, selectedProject);
+              }}
+              className="px-6 py-2 bg-brown-600 text-amber-200 rounded-lg hover:bg-brown-700 transition-colors font-western text-lg shadow-md hover:shadow-lg"
+            >
+              Submit Roadmap
+            </button>
           </div>
         </div>
 
