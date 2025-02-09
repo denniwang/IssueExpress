@@ -164,10 +164,16 @@ export default function SummaryPage() {
         <div className="w-80 bg-white/95 p-6 rounded-lg shadow-xl">
           <div className="flex justify-between items-center mb-2">
             <span className="text-sm text-gray-500">
-              {index + 1} of {approvedTickets.length}
+              {index + 1} of {approvedTickets.length + rejectedTickets.length}
             </span>
-            <span className="px-2 py-1 bg-green-100 text-green-800 text-sm rounded">
-              Accepted
+            <span
+              className={`px-2 py-1 ${
+                ticket.approved
+                  ? "bg-green-100 text-green-800"
+                  : "bg-red-100 text-red-800"
+              } text-sm rounded`}
+            >
+              {ticket.approved ? "Accepted" : "Rejected"}
             </span>
           </div>
           <input
@@ -192,10 +198,16 @@ export default function SummaryPage() {
             </div>
           )}
           <button
-            onClick={() => handleRemove(ticket)}
-            className="mt-4 w-full bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-500 transition-colors"
+            onClick={() =>
+              ticket.approved ? handleRemove(ticket) : handleRestore(ticket)
+            }
+            className={`mt-4 w-full ${
+              ticket.approved
+                ? "bg-red-600 hover:bg-red-500"
+                : "bg-green-600 hover:bg-green-500"
+            } text-white py-2 px-4 rounded-lg transition-colors`}
           >
-            Remove
+            {ticket.approved ? "Reject" : "Accept"}
           </button>
         </div>
       </div>
@@ -261,9 +273,9 @@ export default function SummaryPage() {
           </h1>
 
           <div className="relative max-w-4xl mx-auto">
-            {/* Tickets as Stops */}
             <div className="relative py-8">
-              {approvedTickets.map((ticket, index) => (
+              {/* Combine approved and rejected tickets */}
+              {[...approvedTickets, ...rejectedTickets].map((ticket, index) => (
                 <div
                   key={index}
                   className="relative mb-[6rem]"
@@ -273,7 +285,6 @@ export default function SummaryPage() {
                     opacity: 0,
                   }}
                 >
-                  {/* Path connecting nodes */}
                   {index !== 0 && (
                     <div
                       className="absolute -top-36 left-0 right-0 h-72 overflow-visible"
@@ -291,7 +302,6 @@ export default function SummaryPage() {
                     </div>
                   )}
 
-                  {/* Node content */}
                   <div
                     className={`flex items-center ${
                       index % 2 === 0 ? "flex-row" : "flex-row-reverse"
@@ -299,7 +309,11 @@ export default function SummaryPage() {
                   >
                     <div className="relative group w-24">
                       <div
-                        className="w-24 h-24 bg-amber-50 rounded-full flex items-center justify-center border-4 border-amber-200 hover:border-amber-400 transition-all cursor-pointer z-20 shadow-lg hover:shadow-xl transform hover:scale-105"
+                        className={`w-24 h-24 bg-amber-50 rounded-full flex items-center justify-center border-4 ${
+                          ticket.approved
+                            ? "border-amber-200 hover:border-amber-400"
+                            : "border-red-400 hover:border-red-500"
+                        } transition-all cursor-pointer z-20 shadow-lg hover:shadow-xl transform hover:scale-105`}
                         onClick={(e) => {
                           handleNodeClick(ticket, index, e);
                           e.stopPropagation();
@@ -314,7 +328,12 @@ export default function SummaryPage() {
                         <div className="absolute inset-0 flex items-center justify-center">
                           <span className="text-amber-200 text-2xl font-bold"></span>
                         </div>
-                        <MapPin className="text-amber-200" size={48} />
+                        <MapPin
+                          className={
+                            ticket.approved ? "text-amber-200" : "text-red-400"
+                          }
+                          size={48}
+                        />
                       </div>
                     </div>
 
@@ -324,6 +343,7 @@ export default function SummaryPage() {
               ))}
             </div>
           </div>
+
           {/* Add Submit Button */}
           <div className="flex justify-center mb-8">
             <button
@@ -337,40 +357,6 @@ export default function SummaryPage() {
             >
               Submit Roadmap
             </button>
-          </div>
-        </div>
-
-        {/* Rejected Tickets Sidebar */}
-        <div className="w-80 bg-yellow-800 p-6 overflow-y-auto shadow-lg">
-          <h2 className="text-2xl font-western text-amber-200 mb-6 border-b border-amber-400 pb-2">
-            Rejected Saloons
-          </h2>
-          <div className="space-y-4">
-            {rejectedTickets.map((ticket, index) => (
-              <div
-                key={index}
-                className="bg-brown-700 rounded-lg p-4 text-amber-100 shadow-md hover:shadow-lg transition-shadow"
-              >
-                <h3 className="font-semibold text-lg">{ticket.name}</h3>
-                <p className="text-sm text-amber-200 mt-1">{ticket.label}</p>
-                <div className="flex justify-end gap-2 mt-3">
-                  <button
-                    onClick={() => handleRestore(ticket)}
-                    className="p-1 hover:text-green-400 transition-colors"
-                    title="Restore"
-                  >
-                    <ArrowLeftCircle size={18} />
-                  </button>
-                  <button
-                    onClick={() => handleDelete(ticket)}
-                    className="p-1 hover:text-red-400 transition-colors"
-                    title="Delete"
-                  >
-                    <Trash2 size={18} />
-                  </button>
-                </div>
-              </div>
-            ))}
           </div>
         </div>
       </div>
