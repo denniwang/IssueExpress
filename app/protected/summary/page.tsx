@@ -173,68 +173,6 @@ export default function SummaryPage() {
     handleSave(updatedTicket);
   };
 
-  const PopupCard = () => {
-    if (!activeTicket) return null;
-    const { ticket, index, position, rect } = activeTicket;
-
-    return (
-      <div
-        className="fixed z-50"
-        style={{
-          top: rect.top + rect.height / 2,
-          left: position === "left" ? rect.left - 340 : rect.right + 20,
-          transform: "translateY(-50%)",
-        }}
-      >
-        <div className="w-80 bg-white/95 p-6 rounded-lg shadow-xl">
-          <div className="flex justify-between items-center mb-2">
-            <span className="text-sm text-gray-500">
-              {index + 1} of {tickets.length}
-            </span>
-            <span
-              className={`px-2 py-1 ${
-                ticket.approved
-                  ? "bg-green-100 text-green-800"
-                  : "bg-red-100 text-red-800"
-              } text-sm rounded`}
-            >
-              {ticket.approved ? "Accepted" : "Rejected"}
-            </span>
-          </div>
-          <input
-            className="font-semibold text-lg mb-2 w-full"
-            value={ticket.name}
-            onChange={(e) => handleSave({ ...ticket, name: e.target.value })}
-          />
-          <textarea
-            className="text-sm text-gray-600 mb-3 w-full"
-            value={ticket.description}
-            onChange={(e) =>
-              handleSave({ ...ticket, description: e.target.value })
-            }
-          />
-          {ticket.label && (
-            <div className="flex items-center gap-2">
-              <span className="px-2 py-1 bg-amber-100 text-brown-700 text-sm rounded-full">
-                {ticket.label}
-              </span>
-            </div>
-          )}
-          <button
-            onClick={() => handleToggleApproval(ticket)}
-            className={`mt-4 w-full ${
-              ticket.approved
-                ? "bg-red-600 hover:bg-red-500"
-                : "bg-green-600 hover:bg-green-500"
-            } text-white py-2 px-4 rounded-lg transition-colors`}
-          >
-            {ticket.approved ? "Reject" : "Accept"}
-          </button>
-        </div>
-      </div>
-    );
-  };
-
   const handleNodeHover = (
     ticket: Ticket,
     index: number,
@@ -263,7 +201,7 @@ export default function SummaryPage() {
     setTickets(updatedTickets);
   };
   return (
-    <div className="h-screen bg-[#F7E3E1]">
+    <>
       <style jsx global>
         {styles}
       </style>
@@ -311,7 +249,7 @@ export default function SummaryPage() {
                           ticket.approved
                             ? "border-[#145D98] hover:border-[#145D98]"
                             : "border-[#FF3C68] hover:border-[#FF3C68]"
-                        } transition-all cursor-pointer z-20 shadow-lg hover:shadow-xl transform hover:scale-105`}
+                        } transition-all z-20 shadow-lg hover:shadow-xl transform hover:scale-105`}
                         onMouseEnter={(e) =>
                           handleNodeHover(ticket, index, e, true)
                         }
@@ -360,7 +298,7 @@ export default function SummaryPage() {
                 />
               )}
             </div>
-            <div className="flex justify-center">
+            <div className="fixed bottom-24">
               <button
                 onClick={async () => {
                   setIsLoading(true);
@@ -381,14 +319,14 @@ export default function SummaryPage() {
                     setIsLoading(false);
                   }
                 }}
-                className="font-retro h-16 px-12 fixed py-2 bg-[#0F2E4A] text-white hover:bg-[#0F2E4A]-700 transition-colors font-western text-lg shadow-md hover:shadow-lg"
+                className="font-retro h-16  px-56 py-2 bg-[#0F2E4A] text-white hover:bg-[#0F2E4A]-700 transition-colors font-western text-lg shadow-md hover:shadow-lg"
               >
-                {isLoading ? "Submitting..." : "Submit Roadmap"}
+                {isLoading ? "Submitting..." : "EXPORT TO GITHUB"}
               </button>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
