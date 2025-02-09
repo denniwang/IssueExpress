@@ -154,7 +154,7 @@ const DesertDrive: React.FC = () => {
                 className="absolute top-1/2 -translate-y-1/2 z-10 transition-all duration-300"
                 style={{ left: `${progress}%` }}
               >
-                <Car className="w-6 h-6 text-white -translate-x-1/2" />
+                <Car className="w-6 h-6 text-white -translate-x-1/2" fill="white" />
               </div>
             </div>
 
