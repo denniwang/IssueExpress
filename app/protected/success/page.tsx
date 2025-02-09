@@ -3,8 +3,17 @@
 import { Button } from "@/components/ui/button";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 
-export default function Success() {
+export default function SuccessPage() {
+  return (
+    <Suspense>
+      <Success />
+    </Suspense>
+  )
+}
+
+function Success() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const githubLink = searchParams.get("githubLink");
@@ -30,7 +39,7 @@ export default function Success() {
           >
             CONVERT ANOTHER TRANSCRIPT
           </Button>
-          <Button className="bg-[#1a2e44] hover:bg-[#15253a] text-white" onClick={() => githubLink && router.push(githubLink)}>
+          <Button className="bg-[#1a2e44] hover:bg-[#15253a] text-white" onClick={() => router.push(githubLink ?? "/")}>
             VIEW IN GITHUB
           </Button>
         </div>
