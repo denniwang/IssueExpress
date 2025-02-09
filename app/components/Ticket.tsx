@@ -1,4 +1,5 @@
-import { FaEdit } from "react-icons/fa";
+import { FaEdit, FaPlus } from "react-icons/fa";
+import { FaCircleMinus } from "react-icons/fa6";
 import type { Ticket } from "../protected/tickets/types";
 import { useState, useEffect } from "react";
 
@@ -16,6 +17,8 @@ interface TicketProps {
     field: "startDate" | "endDate"
   ) => void;
   getRandomFutureDate: () => string;
+  isSummary?: boolean;
+  editExport?: (remove: boolean) => void;
 }
 
 const Ticket: React.FC<TicketProps> = ({
@@ -27,9 +30,10 @@ const Ticket: React.FC<TicketProps> = ({
   handleTicketChange,
   handleDateChange,
   getRandomFutureDate,
+  isSummary = false,
+  editExport = (add: boolean) => {},
 }) => {
-
-  const [randomEndDate, setRandomEndDate] = useState<string>('');
+  const [randomEndDate, setRandomEndDate] = useState<string>("");
 
   // Generate random end date once when the component mounts or when ticket.id changes
   useEffect(() => {
@@ -40,8 +44,9 @@ const Ticket: React.FC<TicketProps> = ({
 
   return (
     <div className="flex bg-white rounded-2xl w-full max-w-3xl z-50 fixed font-retro">
-      {/* Sidebar */}
-      <div className="bg-[#0F2E4A] text-white flex flex-col items-center justify-center px-3 py-6 rounded-l-2xl">
+      <div
+        className={`${isSummary && !ticket.approved ? "bg-[#FF3C68] text-[#FCCDD5]" : "bg-[#0F2E4A] text-white"} flex flex-col items-center justify-center px-3 py-6 rounded-l-2xl`}
+      >
         <span className="text-md font-bold tracking-widest">
           {Array.from("HACKBEANPOT").map((char, index) => (
             <span key={index} className="block">
@@ -52,8 +57,29 @@ const Ticket: React.FC<TicketProps> = ({
       </div>
 
       <div className="flex-1 p-6 relative">
-        <div className="bg-[#FCCDD5] text-xs font-bold px-3 py-1 rounded-md inline-block text-[#FF3C68]">
-          STOP {step} OUT OF {totalSteps}
+        <div className="flex justify-between items-center">
+          <div className="flex items-center gap-2">
+            <div className="bg-[#FCCDD5] text-xs font-bold px-3 py-1 rounded-md inline-block text-[#FF3C68]">
+              STOP {step} OUT OF {totalSteps}
+            </div>
+            {isSummary && (
+              <button
+                className={`text-xs text-white px-3 py-1 font-bold ${ticket.approved ? "bg-[#0F2E4A]" : "bg-[#FF3C68]"}`}
+                onClick={onRemove}
+              >
+                {ticket.approved ? "APPROVED" : "REMOVED"}
+              </button>
+            )}
+          </div>
+          {isSummary && (
+            <button
+              className="text-xs text-[#0F2E4A] hover:text-[#FF3C68] font-bold"
+              onClick={() => editExport(ticket.approved ?? false)}
+            >
+              {ticket.approved ? <FaCircleMinus className="inline mr-1 my-auto" /> : <FaPlus className="inline mr-1 my-auto" />}
+              {ticket.approved ? "REMOVE FROM EXPORT" : "ADD TO EXPORT"}
+            </button>
+          )}
         </div>
 
         <div className="mt-4 flex flex-col justify-between items-start border p-6">
@@ -76,27 +102,32 @@ const Ticket: React.FC<TicketProps> = ({
           ></textarea>
         </div>
 
-        <div className="mt-4 flex gap-4">
-          <button
-            onClick={onAccept}
-            className="border border-black px-4 py-1 rounded-md hover:bg-black hover:text-white font-bold"
-          >
-            ACCEPT
-          </button>
-          <button
-            onClick={onRemove}
-            className="text-gray-500 hover:text-black font-bold"
-          >
-            REMOVE
-          </button>
-        </div>
+        {!isSummary && (
+          <div className="mt-4 flex gap-4">
+            <button
+              onClick={onAccept}
+              className="border border-black px-4 py-1 rounded-md hover:bg-black hover:text-white font-bold"
+            >
+              ACCEPT
+            </button>
+            <button
+              onClick={onRemove}
+              className="text-black hover:text-[#FF3C68] font-bold"
+            >
+              REMOVE
+            </button>
+          </div>
+        )}
       </div>
 
       <div className="relative">
-        {/* TODO change color of semi circles to match background to give ticket appearance */}
-        <div className="absolute top-0 left-1/2 transform -translate-x-1/2 bg-[#87ceeb] w-10 h-5 rounded-b-full"></div>
+        <div
+          className={`absolute top-0 left-1/2 transform -translate-x-1/2 ${isSummary ? "bg-amber-50" : "bg-[#87ceeb]"} w-10 h-5 rounded-b-full`}
+        ></div>
         <div className="border-l-2 border-dashed border-black h-full mx-6"></div>
-        <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 bg-[#ffd700] w-10 h-5 rounded-t-full"></div>
+        <div
+          className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 ${isSummary ? "bg-amber-50" : "bg-[#ffd700]"} w-10 h-5 rounded-t-full`}
+        ></div>
       </div>
 
       <div className="bg-white p-6 rounded-r-2xl">
@@ -152,9 +183,7 @@ const Ticket: React.FC<TicketProps> = ({
         <input
           type="datetime"
           className="text-[#FF3C68] px-3 py-1 rounded-md font-bold border-none focus:outline-none"
-          value={
-            randomEndDate
-          }
+          value={randomEndDate}
           onChange={(event) => handleDateChange(event, "endDate")}
           name="endDate"
         />

@@ -13,7 +13,11 @@ export default async function Home() {
   const accessToken = data.session?.provider_token;
   console.log("Access Token", accessToken);
 
-  const response = await fetch("http://localhost:3000/api/getAllRepos", {
+  const defaultUrl = process.env.VERCEL_URL
+  ? `https://${process.env.VERCEL_URL}`
+  : "http://localhost:3000";
+
+  const response = await fetch(`${defaultUrl}/api/getAllRepos`, {
     method: "POST",
     body: JSON.stringify({
       githubToken: accessToken,

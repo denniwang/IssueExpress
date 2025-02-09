@@ -96,14 +96,12 @@ const TranscriptUpload = () => {
             const parsedJson = JSON.parse(fixedResponse);
             console.log(parsedJson);
 
-            const newTickets: Ticket[] = parsedJson.map((item: any) => {
-              return {
-                assignee: item.assignee || "Unassigned",
-                name: item.name || "TBD",
-                label: item.label || "Unknown",
-                description: item.description || "TBD",
-              };
-            });
+            const newTickets: Ticket[] = (parsedJson as Ticket[]).map((item) => ({
+              assignee: item.assignee || "Unassigned",
+              name: item.name || "TBD",
+              label: item.label || "Unknown",
+              description: item.description || "TBD",
+            }));
 
             tickets.push(...newTickets);
             router.push("/protected/tickets");

@@ -67,7 +67,6 @@ const DesertDrive: React.FC = () => {
     } else {
       setAnimationClass(styles.slideOut);
       setCarAnimationClass(styles.slideRight)
-      setShowTicket(false);
     }
 
     setTimeout(() => {
@@ -89,6 +88,9 @@ const DesertDrive: React.FC = () => {
 
       // Reset the animation class
       setAnimationClass("");
+      if (currentTicketIndex >= tickets.length - 1) {
+        setShowTicket(false);
+      }
     }, 1500); // Duration of the slide-out animation
   };
 

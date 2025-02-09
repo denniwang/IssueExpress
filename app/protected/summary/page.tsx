@@ -2,13 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Ticket } from "../tickets/types";
-import {
-  MapPin,
-  Info,
-  Trash2,
-  ArrowLeftCircle,
-  ChevronDown,
-} from "lucide-react";
+import { MapPin } from "lucide-react";
 import React from "react";
 import { handleSubmit } from "@/app/actions";
 
@@ -267,7 +261,7 @@ export default function SummaryPage() {
       </style>
       <div className="flex h-screen bg-[url('/desert-bg.jpg')] bg-cover bg-center">
         <div
-          className="flex-1 p-8 overflow-y-auto bg-amber-50/80 backdrop-blur-sm"
+          className="flex-1 p-8 overflow-y-auto bg-[#F7E3E1] backdrop-blur-sm"
           onClick={() => setActiveTicket(null)}
         >
           <h1 className="text-5xl font-bold mb-16 text-center text-brown-800 font-western drop-shadow-lg">
@@ -357,7 +351,7 @@ export default function SummaryPage() {
                 const approvedTickets = tickets.filter(t => t.approved);
                 handleSubmit(approvedTickets, selectedProject);
               }}
-              className="px-6 py-2 bg-brown-600 text-amber-200 rounded-lg hover:bg-brown-700 transition-colors font-western text-lg shadow-md hover:shadow-lg"
+              className="px-6 py-2 bg-[#0F2E4A] text-white rounded-lg hover:bg-[#0F2E4A]-700 transition-colors font-western text-lg shadow-md hover:shadow-lg"
             >
               Submit Roadmap
             </button>
