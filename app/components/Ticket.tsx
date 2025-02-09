@@ -18,7 +18,7 @@ interface TicketProps {
   ) => void;
   getRandomFutureDate: () => string;
   isSummary?: boolean;
-  editExport?: (remove: boolean) => void;
+  editExport?: (currentStatus: boolean) => void;
 }
 
 const Ticket: React.FC<TicketProps> = ({
@@ -31,7 +31,7 @@ const Ticket: React.FC<TicketProps> = ({
   handleDateChange,
   getRandomFutureDate,
   isSummary = false,
-  editExport = (add: boolean) => {},
+  editExport = (currentStatus: boolean) => { ticket.approved = !currentStatus; },
 }) => {
   const [randomEndDate, setRandomEndDate] = useState<string>("");
 
