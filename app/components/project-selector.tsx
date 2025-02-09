@@ -33,7 +33,9 @@ export default function ProjectSelector({ repos }: { repos: Project[] }) {
   };
 
   const slideRight = () => {
-    setStartIndex((prevIndex) => Math.min(repos.length - 3, prevIndex + 1));
+    if (repos) {
+      setStartIndex((prevIndex) => Math.min(repos.length - 3, prevIndex + 1));
+    }
   };
 
   const handleConfirm = () => {
