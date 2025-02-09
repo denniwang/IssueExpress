@@ -7,7 +7,7 @@ const defaultUrl = process.env.VERCEL_URL
 
 export const metadata = {
   metadataBase: new URL(defaultUrl),
-  title: "TransGIT",
+  title: "IssueExpreess",
   description: "The future of project management",
 };
 

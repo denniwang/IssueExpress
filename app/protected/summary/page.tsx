@@ -127,7 +127,7 @@ export default function SummaryPage() {
 
   const handleSave = (updatedTicket: Ticket) => {
     // Update the ticket in the array
-    const updatedTickets = tickets.map(t =>
+    const updatedTickets = tickets.map((t) =>
       t.name === updatedTicket.name ? updatedTicket : t
     );
 
@@ -144,7 +144,10 @@ export default function SummaryPage() {
   };
 
   const handleToggleApproval = (ticketToToggle: Ticket) => {
-    const updatedTicket = { ...ticketToToggle, approved: !ticketToToggle.approved };
+    const updatedTicket = {
+      ...ticketToToggle,
+      approved: !ticketToToggle.approved,
+    };
     handleSave(updatedTicket);
   };
 
@@ -179,9 +182,7 @@ export default function SummaryPage() {
           <input
             className="font-semibold text-lg mb-2 w-full"
             value={ticket.name}
-            onChange={(e) =>
-              handleSave({ ...ticket, name: e.target.value })
-            }
+            onChange={(e) => handleSave({ ...ticket, name: e.target.value })}
           />
           <textarea
             className="text-sm text-gray-600 mb-3 w-full"
@@ -329,7 +330,9 @@ export default function SummaryPage() {
                         </div>
                         <MapPin
                           className={
-                            ticket.approved ? "text-[#145D98]" : "text-[#FF3C68]"
+                            ticket.approved
+                              ? "text-[#145D98]"
+                              : "text-[#FF3C68]"
                           }
                           size={48}
                         />
@@ -351,16 +354,8 @@ export default function SummaryPage() {
                 const selectedProject = JSON.parse(
                   localStorage.getItem("selectedProject") || "{}"
                 );
-                
-                const approvedTickets = tickets.filter(t => t.approved);
-                const result = await handleSubmit(
-                  approvedTickets,
-                  selectedProject
-                );
-                if (result) {
-                  redirect(result.success.link);
-                }
-                setIsLoading(false);
+                const approvedTickets = tickets.filter((t) => t.approved);
+                handleSubmit(approvedTickets, selectedProject);
               }}
               className="font-retro h-16 px-12 py-2 bg-[#0F2E4A] text-white hover:bg-[#0F2E4A]-700 transition-colors font-western text-lg shadow-md hover:shadow-lg"
             >
