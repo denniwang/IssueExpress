@@ -1,4 +1,5 @@
 import { FaEdit, FaPlus } from "react-icons/fa";
+import { FaCircleMinus } from "react-icons/fa6";
 import type { Ticket } from "../protected/tickets/types";
 import { useState, useEffect } from "react";
 
@@ -17,7 +18,7 @@ interface TicketProps {
   ) => void;
   getRandomFutureDate: () => string;
   isSummary?: boolean;
-  addToExport?: () => void;
+  editExport?: (remove: boolean) => void;
 }
 
 const Ticket: React.FC<TicketProps> = ({
@@ -30,7 +31,7 @@ const Ticket: React.FC<TicketProps> = ({
   handleDateChange,
   getRandomFutureDate,
   isSummary = false,
-  addToExport = () => {},
+  editExport = (add: boolean) => {},
 }) => {
   const [randomEndDate, setRandomEndDate] = useState<string>("");
 
@@ -44,7 +45,7 @@ const Ticket: React.FC<TicketProps> = ({
   return (
     <div className="flex bg-white rounded-2xl w-full max-w-3xl z-50 fixed font-retro">
       <div
-        className={`${isSummary ? "bg-[#FF3C68] text-[#FCCDD5]" : "bg-[#0F2E4A] text-white"} flex flex-col items-center justify-center px-3 py-6 rounded-l-2xl`}
+        className={`${isSummary && !ticket.approved ? "bg-[#FF3C68] text-[#FCCDD5]" : "bg-[#0F2E4A] text-white"} flex flex-col items-center justify-center px-3 py-6 rounded-l-2xl`}
       >
         <span className="text-md font-bold tracking-widest">
           {Array.from("HACKBEANPOT").map((char, index) => (
@@ -63,20 +64,20 @@ const Ticket: React.FC<TicketProps> = ({
             </div>
             {isSummary && (
               <button
-                className="text-xs text-white px-3 py-1 font-bold bg-[#FF3C68]"
+                className={`text-xs text-white px-3 py-1 font-bold ${ticket.approved ? "bg-[#0F2E4A]" : "bg-[#FF3C68]"}`}
                 onClick={onRemove}
               >
-                REMOVED
+                {ticket.approved ? "APPROVED" : "REMOVED"}
               </button>
             )}
           </div>
           {isSummary && (
             <button
               className="text-xs text-[#0F2E4A] hover:text-[#FF3C68] font-bold"
-              onClick={addToExport}
+              onClick={() => editExport(ticket.approved ?? false)}
             >
-              <FaPlus className="inline mr-1 my-auto" />
-              ADD TO EXPORT
+              {ticket.approved ? <FaCircleMinus className="inline mr-1 my-auto" /> : <FaPlus className="inline mr-1 my-auto" />}
+              {ticket.approved ? "REMOVE FROM EXPORT" : "ADD TO EXPORT"}
             </button>
           )}
         </div>
