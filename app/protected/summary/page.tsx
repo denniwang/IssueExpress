@@ -5,7 +5,7 @@ import { Ticket } from "../tickets/types";
 import { MapPin } from "lucide-react";
 import React from "react";
 import { handleSubmit } from "@/app/actions";
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 
 // Update the SVG path components with precise node connections
 const LeftToRightPath = () => (
@@ -118,6 +118,7 @@ export default function SummaryPage() {
     isClicked?: boolean;
   } | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     // Retrieve the tickets from localStorage
@@ -358,7 +359,7 @@ export default function SummaryPage() {
                   selectedProject
                 );
                 if (result) {
-                  redirect(result.success.link);
+                  router.push(`/protected/success?githubLink=${result.success.link}`);
                 }
                 setIsLoading(false);
               }}
