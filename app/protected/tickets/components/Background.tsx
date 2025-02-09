@@ -1,7 +1,11 @@
 import styles from "./DesertDrive.module.css";
 import AssetCar from "./Car";
 
-export default function Background() {
+interface BackgroundProps {
+  carAnimationClass: string;
+}
+
+export default function Background({ carAnimationClass }: BackgroundProps) {
   return (
     <div>
       <div className={styles.sky}>
@@ -23,7 +27,7 @@ export default function Background() {
         </div>
         <div className={styles.road}></div>
       </div>
-      <div className={styles.car}>
+      <div className={`${styles.car} ${carAnimationClass}`}>
         <AssetCar />
       </div>
     </div>
