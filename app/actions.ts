@@ -33,6 +33,10 @@ export const handleSubmit = async (
   approvedTickets: Ticket[],
   selectedProject: Project
 ) => {
+  const defaultUrl = process.env.VERCEL_URL
+    ? `${process.env.VERCEL_URL}`
+    : "localhost:3000";
+
   const supabase = await createClient();
   const {
     data: { user },
@@ -46,7 +50,7 @@ export const handleSubmit = async (
 
   approvedTickets.forEach(async (ticket) => {
     try {
-      const response = await fetch("http://localhost:3000/api/createTicket", {
+      const response = await fetch(`http://${defaultUrl}/api/createTicket`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
