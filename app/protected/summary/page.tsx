@@ -5,6 +5,7 @@ import { Ticket } from "../tickets/types";
 import { MapPin } from "lucide-react";
 import React from "react";
 import { handleSubmit } from "@/app/actions";
+import { redirect } from "next/navigation";
 
 // Update the SVG path components with precise node connections
 const LeftToRightPath = () => (
@@ -82,6 +83,7 @@ export default function SummaryPage() {
     rect: DOMRect;
     isClicked?: boolean;
   } | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     // Retrieve the tickets from localStorage
@@ -336,15 +338,23 @@ export default function SummaryPage() {
           {/* Add Submit Button */}
           <div className="flex justify-center mb-8">
             <button
-              onClick={() => {
+              onClick={async () => {
+                setIsLoading(true);
                 const selectedProject = JSON.parse(
                   localStorage.getItem("selectedProject") || "{}"
                 );
-                handleSubmit(approvedTickets, selectedProject);
+                const result = await handleSubmit(
+                  approvedTickets,
+                  selectedProject
+                );
+                if (result) {
+                  redirect(result.success.link);
+                }
+                setIsLoading(false);
               }}
-              className="px-6 py-2 bg-[#0F2E4A] text-white rounded-lg hover:bg-[#0F2E4A]-700 transition-colors font-western text-lg shadow-md hover:shadow-lg"
+              className="font-retro h-16 px-12 py-2 bg-[#0F2E4A] text-white hover:bg-[#0F2E4A]-700 transition-colors font-western text-lg shadow-md hover:shadow-lg"
             >
-              Submit Roadmap
+              {isLoading ? "Submitting..." : "Submit Roadmap"}
             </button>
           </div>
         </div>
