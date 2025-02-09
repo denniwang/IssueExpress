@@ -1,11 +1,25 @@
+"use client";
+
 import styles from "./DesertDrive.module.css";
 import AssetCar from "./Car";
+import { useEffect, useState } from "react";
 
 interface BackgroundProps {
   carAnimationClass: string;
 }
 
 export default function Background({ carAnimationClass }: BackgroundProps) {
+  const [cactusHeights, setCactusHeight] = useState<string[]>([]);
+
+  useEffect(() => {
+    const height = Math.floor(Math.random() * 50) + "px";
+    console.log(height);
+    setCactusHeight(
+      Array.from({ length: 5 }, () => Math.floor(Math.random() * 100) + "px")
+    );
+    console.log(cactusHeights);
+  }, []);
+
   return (
     <div>
       <div className={styles.sky}>
@@ -15,15 +29,16 @@ export default function Background({ carAnimationClass }: BackgroundProps) {
       </div>
       <div className={styles.desert}>
         <div className={styles.cactusContainer}>
-          <div className={styles.cactus}></div>
-          <div
-            className={styles.cactus}
-            style={{ animationDelay: "-20s" }}
-          ></div>
-          <div
-            className={styles.cactus}
-            style={{ animationDelay: "-40s" }}
-          ></div>
+          {Array.from({ length: 5 }).map((_, index) => (
+            <div
+              key={index}
+              className={styles.cactus}
+              style={{
+                bottom: cactusHeights[index],
+                animationDelay: `${-index * 12}s`,
+              }}
+            ></div>
+          ))}
         </div>
         <div className={styles.road}></div>
       </div>

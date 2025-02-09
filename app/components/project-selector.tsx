@@ -125,7 +125,7 @@ export default function ProjectSelector({ repos }: { repos: Project[] }) {
                       HACKBEANPOT
                     </span>
                   </div>
-                  <span className="font-retro text-white text-xl mt-8 whitespace-pre-line leading-relaxed">
+                  <span className="font-retro text-white text-xl mt-8 whitespace-pre-line leading-relaxed break-words w-[80%] px-4">
                     {project.name}
                   </span>
                 </div>
