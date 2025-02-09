@@ -2,15 +2,16 @@
 
 import { useEffect, useState } from "react";
 import { Ticket } from "../tickets/types";
-import {
-  MapPin,
-} from "lucide-react";
+import { MapPin } from "lucide-react";
 import React from "react";
 import { handleSubmit } from "@/app/actions";
 
 // Update the SVG path components with precise node connections
 const LeftToRightPath = () => (
-  <svg className="absolute w-full h-48 -z-10 pointer-events-none" viewBox="0 0 800 200">
+  <svg
+    className="absolute w-full h-48 -z-10 pointer-events-none"
+    viewBox="0 0 800 200"
+  >
     <path
       // Start from center of left node (x: node radius), curve to center of right node
       d="M 12 12 C 250 12, 550 188, 788 188"
@@ -24,7 +25,10 @@ const LeftToRightPath = () => (
 );
 
 const RightToLeftPath = () => (
-  <svg className="absolute w-full h-48 -z-10 pointer-events-none" viewBox="0 0 800 200">
+  <svg
+    className="absolute w-full h-48 -z-10 pointer-events-none"
+    viewBox="0 0 800 200"
+  >
     <path
       // Start from center of right node, curve to center of left node
       d="M 788 12 C 550 12, 250 188, 12 188"
