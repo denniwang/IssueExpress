@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { createWorker } from "tesseract.js";
 import { useRouter } from "next/navigation";
 import React from "react";
@@ -11,7 +11,15 @@ import Image from "next/image";
 const TranscriptUpload = () => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [ocrResult, setOcrResult] = useState<string>("");
+  const [projectName, setProjectName] = useState<string | null>(null);
   const router = useRouter();
+
+  useEffect(() => {
+    const storedProjectName = localStorage.getItem("selectedProjectName");
+    if (storedProjectName) {
+      setProjectName(storedProjectName);
+    }
+  }, []);
 
   const handleFileChange = (file: File) => {
     setSelectedImage(file);
@@ -127,7 +135,7 @@ const TranscriptUpload = () => {
   return (
     <div className="flex flex-col items-center p-5 rounded-lg bg-white">
       <p className="text-lg text-[#FF3C68]">UPLOADING FOR</p>
-      <h1 className="text-2xl font-bold mb-4 text-[#0F2E4A]">PROJECT NAME</h1>
+      <h1 className="text-2xl font-bold mb-4 text-[#0F2E4A]">{projectName || "Loading..."}</h1>
       <div
         onDrop={handleDrop}
         onDragOver={handleDragOver}

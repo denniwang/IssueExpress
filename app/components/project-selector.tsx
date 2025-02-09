@@ -39,6 +39,7 @@ export default function ProjectSelector({ repos }: { repos: Project[] }) {
   const handleConfirm = () => {
     if (selectedProject) {
       localStorage.setItem("selectedProject", JSON.stringify(selectedProject));
+      localStorage.setItem("selectedProjectName", selectedProject.name);
       router.push("/protected/uploadTranscript");
     }
   };
