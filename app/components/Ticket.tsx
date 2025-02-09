@@ -30,7 +30,7 @@ const Ticket: React.FC<TicketProps> = ({
   return (
     <div className="flex bg-white shadow-lg rounded-2xl w-full max-w-3xl z-50 fixed font-retro">
       {/* Sidebar */}
-      <div className="bg-gray-500 text-white flex flex-col items-center justify-center px-3 py-6 rounded-l-2xl">
+      <div className="bg-[#0F2E4A] text-white flex flex-col items-center justify-center px-3 py-6 rounded-l-2xl">
         <span className="text-md font-bold tracking-widest">
           {Array.from("HACKBEANPOT").map((char, index) => (
             <span key={index} className="block">
@@ -41,7 +41,7 @@ const Ticket: React.FC<TicketProps> = ({
       </div>
 
       <div className="flex-1 p-6 relative">
-        <div className="bg-gray-300 text-xs font-bold px-3 py-1 rounded-md inline-block">
+        <div className="bg-[#FCCDD5] text-xs font-bold px-3 py-1 rounded-md inline-block text-[#FF3C68]">
           STOP {step} OUT OF {totalSteps}
         </div>
 
@@ -94,10 +94,10 @@ const Ticket: React.FC<TicketProps> = ({
             ASSIGNEE
           </label>
           <div className="font-bold flex items-center gap-2">
-            <span className="w-3 h-3 bg-gray-400 rounded-full inline-block"></span>
+            <span className="w-3 h-3 bg-[#0F2E4A] rounded-full inline-block"></span>
             <input
               type="text"
-              className="bg-transparent border-none p-0 m-0 focus:outline-none"
+              className="bg-transparent border-none p-0 m-0 focus:outline-none text-[#FF3C68]"
               value={ticket.assignee}
               onChange={handleTicketChange}
               name="assignee"
@@ -109,10 +109,10 @@ const Ticket: React.FC<TicketProps> = ({
           <label className="text-xs text-gray-500" htmlFor="label">
             LABEL
           </label>
-          <div className="bg-gray-400 text-white px-3 py-1 rounded-md font-bold inline-block">
+          <div className="bg-[#FCCDD5] text-white px-3 py-1 rounded-md font-bold inline-block">
             <input
               type="text"
-              className="bg-transparent border-none p-0 m-0 focus:outline-none text-white"
+              className="bg-transparent border-none p-0 m-0 focus:outline-none text-[#FF3C68]"
               value={ticket.label}
               onChange={handleTicketChange}
               name="label"
@@ -125,7 +125,7 @@ const Ticket: React.FC<TicketProps> = ({
         </label>
         <input
           type="datetime"
-          className="text-black px-3 py-1 rounded-md font-bold border-none focus:outline-none"
+          className="text-[#FF3C68] px-3 py-1 rounded-md font-bold border-none focus:outline-none"
           value={
             ticket.startDate
               ? ticket.startDate.toISOString().split("T")[0]
@@ -140,7 +140,7 @@ const Ticket: React.FC<TicketProps> = ({
         </label>
         <input
           type="datetime"
-          className="text-black px-3 py-1 rounded-md font-bold border-none focus:outline-none"
+          className="text-[#FF3C68] px-3 py-1 rounded-md font-bold border-none focus:outline-none"
           value={
             ticket.endDate
               ? ticket.endDate.toISOString().split("T")[0]

@@ -8,6 +8,7 @@ import { TentTree, Car, MapPin } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Background from "./Background";
 import TicketComponent from "@/app/components/Ticket";
+import { IoReturnUpBackOutline } from "react-icons/io5";
 
 const DesertDrive: React.FC = () => {
   const [currentTicketIndex, setCurrentTicketIndex] = useState(0);
